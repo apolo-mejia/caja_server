@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+"luma.oled" = "*"
+netifaces = "*"
+"rpi.gpio" = "*"
+watchdog = "*"
+pathlib = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.7"
