@@ -1,0 +1,48 @@
+<head>
+<link rel="stylesheet" href="{{url_for('static', filename='css/wifi.css')}}"> 
+</head>
+
+<h2>Configurar RED </h2>
+
+<div id="activa">
+  <h4> {{ net['ssid'] }} </h4>
+  Guardada : {{ net['saved'] }}
+  Senal: {{ net['signal'] }} - Calidad: {{ net['quality'] }} - mode : {{ net['mode']}} - Chanel: {{net['chanel'] }} <br>
+  Frecuencia: {{ net['frequency'] }} - encrypted: {{ net['encrypted'] }} - address: {{ net['address'] }} - Seguridad: {{ net['encryption_type'] }} <br>
+  <b>Descripcion: </b> {{ net['description'] }}
+
+</div>
+<div class="net">
+  <b> Registrar </b><br>
+  <form method='POST' novalidate>
+    {{ form.hidden_tag() }}
+    {{ form.ssid.label }}
+    {{ form.ssid(size=20, value=net['ssid'], readonly=True)}} <br>
+      {% for error in form.ssid.errors %}
+        <span style="color: red;"> {{ error }} </span> <br>
+      {% endfor %}
+    
+    {{ form.pass_word.label }}
+    {{ form.pass_word(size=20) }} <br>
+      {% for error in form.pass_word.errors %}
+        <span style="color: red;"> {{ error }} </span> <br>
+      {% endfor %}
+    {{ form.submit() }}
+  </form>
+</div>
+{% if net['saved'] == True %}
+  <div class="net">
+    <b>Borrar Red</b><br>
+    <form method='POST' novalidate>
+      {{ form0.hidden_tag() }}
+      {{ form0.ssid.label }}
+      {{ form0.ssid(size=20, value=net['ssid'], readonly=True)}} <br>
+        {% for error in form0.ssid.errors %}
+          <span style="color: red;"> {{ error }} </span> <br>
+        {% endfor %}
+      {{ form0.id_net.label }}
+      {{ form0.id_net(size=10, value=net['id'], readonly=True) }} <br>
+      {{ form0.submit() }}
+  </form>
+</div>
+{% endif %}

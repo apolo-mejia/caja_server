@@ -1,0 +1,2 @@
+network id / ssid / bssid / flags
+0	HOME-1A37	any	[CURRENT]

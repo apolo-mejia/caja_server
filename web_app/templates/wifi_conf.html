@@ -1,0 +1,138 @@
+<head>
+</head>
+<style>
+#activa{
+  height: 120px;
+  width: 98%;
+  margin: 0 auto;
+  background-color: transparent;
+  border-radius: 15px;
+  border: 2px solid blue;
+  padding: 5px 10px 5px 5px;
+  font: 12px Arial, Helveltica, sans-serif;
+  color: black;
+}
+.signal_a{
+  background-repeat:no-repeat;
+  background-size: 100% 100%;
+  height : 78%;
+  width : 12%;
+//  background-color: blue;
+  padding: 10px;
+  float: right;
+}
+.signal{
+  background-repeat:no-repeat;
+  background-size: 100% 100%;
+  height : 72%;
+  width : 20%;
+//  background-color: blue;
+  padding: 10px;
+  float: right;
+}
+
+.signal_txt{
+  height : 95%;
+  width : 70%;
+#  background-color: yellow;
+  float: left;
+}
+.net{
+  float: left;
+  height: 80px;
+  width: 30%;
+#  background-color: yellow;
+  border-radius :15px;
+  border: 2px solid blue;
+  padding: 4px 6px 4px 4px;
+  margin: 5px;
+  font: 10px Arial, Helveltica, sans-serif;
+  color: auto;
+}
+ul#devices{
+  list-style-type: none;
+  display: block;
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+}
+ul#devices li a{
+  padding: 0;
+  display: block;
+  width: 100%;
+  height: 80px;
+  color: black;
+  text-decoration: none;
+}
+ul#devices li a:hover{
+  background-color: transparent;
+}
+ul#devices li a span{
+  display: none;
+}
+ul#devices li a:hover span{
+  display: block;
+  padding: 0;
+  margin: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: blue;
+  top: 0;
+  font: 38px Arial, Helveltica, sans-serif;
+  filter: opacity(60%);
+  color: #00cc00;
+}
+</style>
+
+<h1> Interface: WIFI </h1>
+<div id="activa">
+  <div class="signal_txt">
+    <h3>RED ACTIVA : {{ netc['ssid'] }} </h3>
+    {% if netc['ssid'] == 'Ninguna' %}
+       -- No esta conectado a ninguna red -- <br>
+       -- Selecciona una red y registrala -- <br>
+       -- Asegurese que la señal cumpla con los requerimientos --
+       -- En caso de no cargar las redes, presione "F5" en interlos de 5 segundos -- 
+  </div>
+  <div class="signal_a" style="background-image:url(/static/images/wifi.png)"> 
+  </div>
+    {% else %} 
+      {% for net in nets %}
+        {% if net['ssid'] == netc['ssid'] %}
+          Senal: {{ net['signal'] }} - Calidad: {{ net['quality'] }} - mode : {{ net['mode']}} - Chanel: {{net['chanel'] }} <br>
+          frequency: {{ net['frequency'] }} - encrypted: {{ net['encrypted'] }} - address: {{ net['address'] }} -  Seguridad: {{ net['encryption_type'] }} <br>
+          <b>Descripcion: </b> {{ net['description'] }}
+  </div>
+  <div class="signal_a" style="background-image:url({{ net['image'] }})">.
+  </div>
+        {% endif %}
+      {% endfor %}
+   {% endif %}
+</div>
+ 
+Las redes al rededor son : <br>
+<ul id="devices">
+  {% for net in nets %}  
+    <li class='net' style="background-color: 
+    {% if net['saved'] == True  %}
+       	#e6ffe6;
+    {% else %}
+       transparent;
+    {% endif %}  
+    ">
+      <a href="{{ url_for('ssid_conf', id=net['ssid']) }}">
+          <div class="signal_txt">
+          <b>SSID: {{ net['ssid'] }}</b> - Saved: {{ net['saved'] }} -- {{ net['id'] }} <br>
+          Senal: {{ net['signal'] }} - Freq: {{net['frequency']}} - Encry: {{ net['encrypted'] }} <br>
+          Chanel: {{net['chanel']}} - MAC: {{net['address']}} - Seguridad: {{ net['encryption_type'] }} <br>
+          <b>Descripcion:</b> {{ net['description'] }}
+          </div>
+          <div class="signal" style="background-image:url({{ net['image'] }})">.
+          </div>
+        <span>
+                    
+        </span>
+      </a>
+    </li>
+   {% endfor %}   
+</ul>
