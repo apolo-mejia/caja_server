@@ -1,0 +1,42 @@
+Procedimento:
+1- Instalación de paquetes necesarios
+ |-- Instalar el pienv
+ | $ sudo pip3 install pipenv "se debe usar sudo"
+ |-- Instalar el apache2
+ |-- Instalar el modulo WSGI para apache
+ | $ sudo apt-get install libapache2-mod-wsgi-py3 
+
+
+2- Instalación de la web_ app
+ |-- mover la carpeta 
+ |-- caja_server/web_app -> /var/www/html/ 
+ |
+ 2.1 -- Se crea el enviroment donde se ejecuta esta app vamos a 
+     |- /var/www/html/web_app "Y alli"
+     | $ sudo pipenv install   "esta carpeta necesita permisos de administrador"
+     |- Anotamos la dirección "vive" este enviroment
+     | $ pipenv --venv
+     | >> /home/pi/.local/share/virtualenvs/web_app-y4PcvRiq 
+     |- Asegurarse que en el archivo run.wsgi la variable "activate_this" tenga esta ruta y 
+     |  agregre "/bin/activate_this.py" -> a esta ruta, queda algo así:
+     |  activate_this = '/home/pi/.local/share/virtualenvs/web_app-y4PcvRiq/bin/activate_this.py'
+     
+
+Acciones nuevas:
+Cambio en el archivo: 000-default.conf
+Se cambia la ruta para buscar: run.wsgi 
+
+
+Insumos para el instalador:
+Destino de las carpetas
+
+|--/servicio   -> "por ahora en " /home/pi/  
+|--/sistema0.2 -> " por ahora en " /home/pi/
+
+Los archivos de configuración:
+
+Una copia de los archivos de configuración de la web api, va en
+
+|--/var/www/html/web_app/config_files/000-default.conf
+  |-- a "es bueno guaradar la configuración anterior"    
+  |-->/etc/apache2/sites-available/

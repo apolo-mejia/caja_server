@@ -7,9 +7,5 @@ conectados a los recursos de las nubes.
 
 
 
-Destino de las instalaiones:
-
-|--/web_app -> /var/www/html/web_app
-|--/servicio ->  "por ahora en" /home/pi/  
-|--/sistema ->   " por ahora en" /home/pi/
+	
 
