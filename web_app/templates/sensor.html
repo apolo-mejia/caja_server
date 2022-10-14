@@ -1,0 +1,10 @@
+Quieres hacer una toma<br>
+<form method='POST' novalidate>
+{{ form.hidden_tag() }}
+{{ form.sensor_mac.label }}
+{{ form.sensor_mac(size=18, value="mac de prueba", readonly=True) }} <br>
+  {% for error in form.sensor_mac.errors %}
+    <span style="color:red"> {{error}} </span>
+  {% endfor %}
+{{ form.submit() }}
+</form>

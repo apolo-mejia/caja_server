@@ -1,14 +1,15 @@
 Procedimento:
 1- Instalación de paquetes necesarios
  |-- Instalar el pienv
- | $ sudo pip3 install pipenv "se debe usar sudo"
+ | $ sudo pip3 install pipenv "se debe usar sudo" o 
+ | $ sudo apt-get pipenv -- Me gusta mas este
  |-- Instalar el apache2
  |-- Instalar el modulo WSGI para apache
  | $ sudo apt-get install libapache2-mod-wsgi-py3 
 
 
 2- Instalación de la web_ app
- |-- mover la carpeta 
+ |-- Mover la carpeta 
  |-- caja_server/web_app -> /var/www/html/ 
  |
  2.1 -- Se crea el enviroment donde se ejecuta esta app vamos a 
@@ -20,23 +21,37 @@ Procedimento:
      |- Asegurarse que en el archivo run.wsgi la variable "activate_this" tenga esta ruta y 
      |  agregre "/bin/activate_this.py" -> a esta ruta, queda algo así:
      |  activate_this = '/home/pi/.local/share/virtualenvs/web_app-y4PcvRiq/bin/activate_this.py'
-     
+     | - Mover el archivo: /var/www/html/web_app/config_files/000-default.conf
+     |-->/etc/apache2/sites-available/
+     |- "es bueno guaradar la configuración anterior"
 
-Acciones nuevas:
-Cambio en el archivo: 000-default.conf
-Se cambia la ruta para buscar: run.wsgi 
+3- Instalación del sistema
+ |--Mover la carpeta
+ |--/sistema0.2 -> " por ahora en " /home/pi/
+ |
+ 3.1 -- Se crea el enviroment del sistema
+ |- /home/pi/ "Y allí"
+ |- pipenv install -- "Creo que es mejor usar sudo"
+ |- Apagar la raspberry pi- para instalar el hardware
+ |- activar la shell 
+ | $ pipenv shell 
+ |- probar la pantalla con el esscript: screen.py
+ | (sistema0.2-PUOAxsh9) user@machine:~/sistema $ python screen.py
+ |- !! Al parecer el pipenv no pude instalar ciertas depencias 
+ |- Instalar loma.oled desde el sudo apt-get install loma-oled
+ |- mover el archivo 
+ |- $ sistema.service -> /etc/systemd/system/
+ |
+ |- Ordenamos a lunix que tenga nuestro servicio en cuenta
+ | $ sudo systemctl start sistema
+ |- Comprobar funcionamiento y habilitarlo al boot
+ |- sudo systemctl enable sistema
+
+4 Instalación de la carpeta que sirve a los servicios
+ | Mover la carpeta: 
+ |- /servicio-> "por ahora en" /home/pi
 
 
 Insumos para el instalador:
-Destino de las carpetas
 
-|--/servicio   -> "por ahora en " /home/pi/  
-|--/sistema0.2 -> " por ahora en " /home/pi/
 
-Los archivos de configuración:
-
-Una copia de los archivos de configuración de la web api, va en
-
-|--/var/www/html/web_app/config_files/000-default.conf
-  |-- a "es bueno guaradar la configuración anterior"    
-  |-->/etc/apache2/sites-available/

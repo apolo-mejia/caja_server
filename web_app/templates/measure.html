@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/measure.css')}}" >
+</head>
+
+<body>
+<div id="cuerpo">
+  <div id="cabecera">
+    <div id="meta-measure">
+      --- Datos de la medida ----<br>
+      Medida tomada el : <--colocar la fecha --> <br>
+      Sensor: <-- Colocar el id del sensor --><br>
+      Sensor: <-- Nombre Asociado -->
+      Ubicación: <br>
+      Asocioado a tarea :<br>
+      RPM: <br>
+      Configuración del sensor:      
+    </div>
+    <div id="figure">
+      <img src="{{ url_for('plot3d_png', med=med, file2read=file2read) }}" alt="my plot" style="height:130%; width:130%;" >  
+    </div>
+  </div> 
+  <div class="topnav">
+    {{ med }}
+    {% if med == 2 %}
+      <a class="active" href="#home">Desplazamiento</a>
+    {% else %}
+      <a href="#home">Desplazamiento</a>
+    {% endif %}
+    {% if med == 0 %}
+      <a class="active" href="{{ url_for('show_measure', med='0',file2read=file2read ) }}">Velocidad</a>
+    {% else %}
+      <a href="{{ url_for('show_measure', med='0',file2read=file2read ) }}">Velocidad</a>
+    {% endif %}
+    {% if med == 1 %}
+      <a class="active" href="{{ url_for('show_measure', med='1', file2read=file2read) }}">Aceleración</a>
+    {% else %}
+      <a href="{{ url_for('show_measure', med='1', file2read=file2read) }}">Aceleración</a>
+    {% endif %}
+    {% if med == 3 %}
+      <a class="active" href="{{ url_for('show_measure', med='3', file2read=file2read )}}">Toma Original</a>
+    {% else %}
+      <a href="{{ url_for('show_measure', med='3', file2read=file2read )}}">Toma Original</a>
+    {% endif %}
+  </div>
+
+  <div id="indicadores">
+     <div class="indi_cont">
+     </div>  
+  |---------------------------------------------------|<br>
+  |ºººººººººººººººººººººººººººººººº                   |<br>
+  |ºººººººººººººººººººººººº                           |<br>
+  |---------------------------------------------------|
+  </div>
+  <div id="ejes">
+    <div class="eje">
+      <div class="eje_sel">
+        <br>
+        <b>Eje "X" </b> <br>
+        RMS (pico a pico): <b>{{ rms['x']['rms'] }}  {{rms['unit'] }}</b> <br>
+        RMS (evaluado): <br>
+        Máximo:<b>{{ rms['x']['max'] }}</b> <br>
+        Sugerencia: 
+      </div> 
+      <div class="eje_osc">
+        <img src="{{ url_for('plotx_png',med=med, file2read=file2read) }}" alt="my plot" style="width:100%;height:100%;">  
+    </div>
+    </div>
+    <div class="eje">
+      <div class="eje_sel">
+        <br>
+        <b> Eje "Y" </b> <br>
+        RMS (pico a pico):<b> {{ rms['y']['rms'] }}  {{rms['unit'] }}</b> <br>
+        RMS (evaluado): <br>
+        Máximo:<b> {{ rms['y']['max'] }}</b> <br>
+        Sugerencia:
+      </div>
+      <div class="eje_osc"> 
+         <img src="{{ url_for('ploty_png',med=med, file2read=file2read) }}" alt="my plot" style="width:100%;height:100%;">
+      </div>
+    </div>
+    <div class="eje">
+      <div class="eje_sel">
+        <br>
+        <b> Eje "Z" </b><br>
+        RMS (pico a pico): <b>{{ rms['z']['rms'] }} {{rms['unit'] }}</b> <br>
+        RMS (evaluado): <br>
+        Máximo:  <b>{{ rms['z']['max'] }}</b><br>
+        Sugerencia:
+      </div>
+      <div class="eje_osc">
+        
+        <img src="{{ url_for('plotz_png',med=med, file2read=file2read) }}" alt="my plot" style="width:100%;height:100%;">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>

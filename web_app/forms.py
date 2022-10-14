@@ -11,3 +11,7 @@ class erase_network(FlaskForm):
     ssid = StringField('SSID', validators=[DataRequired()])
     id_net = StringField('Net_id', validators=[DataRequired()])
     submit = SubmitField('Olviar Red...')
+
+class start_measure(FlaskForm):
+    sensor_mac = StringField('MAC_sensor', validators=[DataRequired()])
+    submit = SubmitField('Iniciar la toma')

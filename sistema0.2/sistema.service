@@ -25,7 +25,8 @@ Description=My Service
 Type=simple
 
 # Main task
-ExecStart=/opt/my_service/venv3/bin/python3 /opt/my_service/service.py
+ExecStart= /home/pi/.local/share/virtualenvs/sistema0.2-PUOAxsh9/bin/python3 /home/pi/sistema0.2/service.py
+# ExecStart=/opt/my_service/venv3/bin/python3 /opt/my_service/service.py
 
 # Required to see Python output in logs
 Environment="PYTHONUNBUFFERED=x"

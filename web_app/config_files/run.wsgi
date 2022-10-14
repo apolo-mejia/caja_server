@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, "/var/www/html/web_app")
+sys.path.insert(0, "/var/www/html/web_app/")
 
 activate_this = '/home/pi/.local/share/virtualenvs/web_app-y4PcvRiq/bin/activate_this.py'
 with open(activate_this) as file_:
