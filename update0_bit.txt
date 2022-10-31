@@ -4,6 +4,7 @@ Procedimento:
  | $ sudo pip3 install pipenv "se debe usar sudo" o 
  | $ sudo apt-get pipenv -- Me gusta mas este
  |-- Instalar el apache2
+ | $ sudo apt-get install apache2 
  |-- Instalar el modulo WSGI para apache
  | $ sudo apt-get install libapache2-mod-wsgi-py3 
 
@@ -18,6 +19,8 @@ Procedimento:
      |- Anotamos la dirección "vive" este enviroment
      | $ pipenv --venv
      | >> /home/pi/.local/share/virtualenvs/web_app-y4PcvRiq 
+     | Vamos a cambiar la configuración del archivo run.wsgi 
+     | por que no podemos usar el pipenv debido a la imposibilidad de instalar el numpy y el matplotlib con el pipenv
      |- Asegurarse que en el archivo run.wsgi la variable "activate_this" tenga esta ruta y 
      |  agregre "/bin/activate_this.py" -> a esta ruta, queda algo así:
      |  activate_this = '/home/pi/.local/share/virtualenvs/web_app-y4PcvRiq/bin/activate_this.py'
@@ -31,15 +34,17 @@ Procedimento:
  |
  3.1 -- Se crea el enviroment del sistema
  |- /home/pi/ "Y allí"
- |- pipenv install -- "Creo que es mejor usar sudo"
+ |- !! Al parecer el pipenv no pude instalar ciertas depencias 
+ |- Instalar luma.oled desde el pip
+ |- pip3 install luma.oled
+ |- pipenv install -- 
  |- Apagar la raspberry pi- para instalar el hardware
  |- activar la shell 
  | $ pipenv shell 
  |- probar la pantalla con el esscript: screen.py
  | (sistema0.2-PUOAxsh9) user@machine:~/sistema $ python screen.py
- |- !! Al parecer el pipenv no pude instalar ciertas depencias 
- |- Instalar loma.oled desde el sudo apt-get install loma-oled
- |- mover el archivo 
+
+ |- mover el archivo
  |- $ sistema.service -> /etc/systemd/system/
  |
  |- Ordenamos a lunix que tenga nuestro servicio en cuenta
