@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/part.css')}} ">
+{% endblock %}
+
+{% block content %}
+  <h3 style="margin: 0 0px 0px 5px;">
+    {% if partd['a_status'] == 1 %}    
+      <i class="fa-solid fa-circle fa-2x" style="color:#adebad;"></i>
+    {% elif partd['a_status'] == 2 %}
+      <i class="fa-solid fa-circle fa-2x" style="color:#ffd1b3;"></i>
+    {% elif partd['a_status'] == 3 %}
+      <i class="fa-solid fa-circle fa-2x" style="color:#ff99bb;"></i>
+    {% elif partd['a_status'] == 4 %}
+      <i class="fa-solid fa-circle fa-2x" style="color:#d9d9d9;"></i>
+     {% else %}
+       <i class="fa-solid fa-circle fa-2x"></i>
+     {% endif %}
+     <a href="{{ url_for('machine', id_m=partd['id_machine']) }} ">{{ machined['name'] }}</a> / {{ partd['name']}}</h3>
+  <div id="contend">
+    <button class="accordion">Datos de Plantilla</button>
+      <div class="panel">
+        <div class="m_field">
+          <img src="{{ url_for('static', filename='images/avatars/parts/')}}{{partd['avatar']}} " style="float:left; width:254px; height: 254px">
+          <table style="float:left; margin-left:10px;">
+            <tr><td style="width:180px;">Tipo: </td><td class="c_value" style="width:180px">{{ partd['type'] }}</td><td><b>---- ----</b></td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            {% for key,value in s_fields.items() %}
+            <tr><td>{{ key }}</td><td  class="c_value">{{ value[0] }}</td><td><b>{{ value[1] }}</b></td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            {% endfor%}
+          </table>
+        </div>
+      </div>
+    <button class="accordion">Datos de referencia</button>
+      <div class="panel">
+        <div class="m_field">
+          <table>
+            <tr><td style="width:200px;">Nombre: </td><td class="r_value">{{ partd['name'] }}</td>
+                 <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td style="width:200px;">Asociado a máquina </td><td class="r_value">{{ machined['name'] }}</td>
+                 <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Marca: </td><td  class="r_value">{{ partd['brand'] }}</td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Modelo: </td><td  class="r_value">{{ partd['model'] }}</td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Serial: </td><td class="r_value">{{ partd['m_serial'] }}</td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Serial Interno/#Inventario: </td><td  class="r_value">{{ partd['i_serial'] }}</td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+          </table>
+        </div>
+      </div>
+    <button class="accordion">Descripción / Journal</button>
+      <div class="panel">
+        <div class="m_field">
+          <table>
+            <tr><td style="width:200px;min-width:200px;">Descripción: </td><td class="d_value" style="width:82%;min-width:280px;">{{ partd['description'] }}</td>
+                 <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+          </table>
+          Journal
+          <div class="journal">
+            La últimos movimivientos de las cosas <br>
+            Primera linea<br>
+            Segunda linea<br>
+            Tercera linea<br>
+            Cuarta Linea<br>
+            Quita Linea<br>
+            Sexta Linea<br>
+            Séptima Linea<br>
+            Octava Linea<br>
+            Novena Linea<br>
+            Décima Linea<br>
+          </div>
+        </div>        
+          <div id="visual_des">
+            <a href="#">Ver todo</a>
+            <a href="#">+Ingresar evento</a> 
+          </div>
+      </div>   
+  </div>
+
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+</script>
+
+{% endblock %}

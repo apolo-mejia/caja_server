@@ -1,0 +1,147 @@
+#components_cont{
+  float: left;
+  width: 100%;
+  heigth:130px;
+  min-heigth: 100px;
+  border: 1px solid blue;
+  border-radius: 4px;
+  min-width: 670px;
+}
+
+#components_cont a{
+  float: left;
+  border: 1px solid transparent;
+  border-radius:4px; 
+  width: 64px;
+  margin-right:2px;
+}
+#components_cont a:visited{
+  float: left;
+  border: 1px solid transparent;
+  border-radius:4px; 
+  width: 64px;
+  margin-rigth:2px;
+}
+#components_cont a:hover{
+  background-color: #8099ff;
+}
+
+#contend{
+  float: left;
+  width: 100%;
+  heigth: auto;
+  min-heigth: 100px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  min-width: 670px;
+  padding: 2px 0px 5px 0px;
+}
+
+#visual_des {
+  float: right;
+  width: 30%;
+  min-width: 60px;
+  background-color: transparent;
+  overflow: auto;
+  margin-right: 0px;
+}
+#visual_des a {
+  float: right;
+  width: 48%;
+  min-width: 30px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  text-align: center;
+  padding: 0;
+  transition: all 0.3s ease;
+  color: black;
+  font-size: 12px;
+  text-decoration: none;
+}
+#visial_des a:visited {
+  float: right;
+  width: 48%;
+  min-width: 30px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  text-align: center;
+  padding: 0;
+  transition: all 0.3s ease;
+  color: black;
+  font-size: 12px;
+  text-decoration: none;
+}
+#visual_des a:hover {
+  background-color: #8099ff;
+}
+
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+  background-color: #e6ebff;
+  color: black;
+  cursor: pointer;
+  padding: 8px 8px 4px 10px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  transition: 0.6s;
+  border-bottom: 2px solid blue;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .accordion:hover {
+  background-color: #8099ff;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  padding: 8px;
+  background-color: white;
+  display: none;
+  overflow: hidden;
+}
+.accordion:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  font-size: 12px;
+  color: black;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+.m_field {
+  padding: 2px;
+  font: 11px Courier New;
+  color: blue;
+}
+.c_value {
+  text-align: right;
+  border: 1px solid #8099ff;
+  width: 100px;
+}
+.r_value {
+  text-align: left;
+  border: 1px solid #8099ff;
+  width: 100px;
+}
+.d_value {
+  text-align: left;
+  border: 1px solid #8099ff;
+  width: 82%;
+  min-width:420px;
+}
+
+.journal {
+  text-align: left;
+  border:1px solid #8099ff;
+  border-radius: 4px;
+  width: 99%;
+  heigth: 120px;
+  min-height: 30px;
+  max-height: 130px;
+  padding: 2px 5px 2px 5px;
+}

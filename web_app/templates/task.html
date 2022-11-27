@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/task.css')}} ">
+{% endblock %}
+{% block content %}
+  <h3 style="width:100%; margin: 0 auto;"><a href="{{ url_for('machine', id_m=taskd['id_machine']) }}"> {{ machined['name'] }} </a>/global task/{{ taskd['name']}}</h3>
+  <div id="components_cont">
+    <div id="t_avatar">
+      <img src="{{ url_for('static', filename='images/avatars/tasks/')}}{{taskd['avatar']}}" style="width:64px; heigth:64px;">
+    </div>
+    <div id="description">
+      {{ taskd['description'] }}
+    </div>
+  </div>
+  fecha de Inicio: {{ taskd['d_start'] }} -- fecha final: {{ taskd['d_end'] }}<br>
+{#  {{ w_block[0][0]}} -- {{ w_block[-1]['n_rows'] }} -- {{ w_block[-1]['r_allow'] }} -- {{ w_block[-1]['win'] }} -- {{ w_block[-1]['a_win']  }}
+  -- {{ w_block[-1]['n_meas'] }} #}
+  <div id="contend">
+    <button class="accordion">Progamación de tomas</button>
+      <div class="panel">
+        <div class="m_field">
+          <table>
+            <tr><td>Programación</td><td>del</td><td> {{ w_block[-1]['s_week']}} </td>
+                <td></td><td  style="text-align:center;"> al </td><td></td><td>{{ w_block[-1]['e_week'] }}</td>
+                <td style="text-align:center;"> Semana:</td><td>{{ w_block[-1]['week'] }}</td>
+            </tr>
+            <tr><td>Hora de Encendido: </td><td></td><td class="editable">{{ taskd['hf_start'] }}</td><td></td>
+                <td>Hora de Apagado:</td> <td></td><td  class=" editable">{{ taskd['hf_end'] }}</td><td>Intervalo tomas:</td>
+                <td class="editable"> {{ w_block[-1]['h_interval'] }}</td><td>Horas</td>
+                <td class="editable"">{{ w_block[-1]['m_interval'] }}</td><td></td><td> Minutos</td>
+            </tr>
+          </table> 
+        </div>
+        <div id="week_scheduler">
+          {# First Row #}
+            {% for i in range (8) %}
+              {% if i == 0 %}
+                <div class="week_container">{{ w_block[0][i]}}</div>
+              {% else %}
+                <div class="week_container_day">{{ w_block[0][i] }}</div>
+              {% endif %}
+            {% endfor %}
+          {# Others Rows #}
+          {% for j in range (1,w_block[-1]['n_rows']) %}
+            {% for i in range (29) %}
+              <div class="week_container" 
+                {% if w_block[j][i] == 0 %}
+                  style="background-color: #e6ebff">
+                {% else %}
+                 >
+                {% endif %}
+              {{ w_block[j][i] }}</div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
+    <button class="accordion">Alarmas</button>
+      <div class="panel">
+        <div class="m_field">
+          <table>
+            <tr> <td class="d_cond">D</td>
+                 <td> {{ taskd['r_val'] }} </td><td> {{ taskd['units'] }} </td>
+                 <td  style="padding-left:10px"> La máquina esta provocando daños en las partes</td></tr>
+            <tr> <td class="c_cond">C</td>
+                 <td> {{ taskd['o_val'] }} </td><td> {{ taskd['units'] }} </td>
+                 <td style="padding-left:10px"> La máquina no debe operar por un tiempo prolongada.</td></tr>
+            <tr> <td class="b_cond">B</td>
+                 <td> {{ taskd['y_val'] }} </td><td> {{ taskd['units'] }} </td>
+                 <td style="padding-left:10px"> La máquina puede operar indefinidamente.</td></tr>
+            <tr> <td class="a_cond">A</td>
+                 <td> {{ taskd['g_val'] }} </td><td> {{ taskd['units'] }} </td>
+                 <td style="padding-left:10px">  Máquina nueva o reacondicionada. </td></tr>
+            <tr> <td class="min">M</td>
+                 <td> {{ taskd['s_val'] }} </td><td> {{ taskd['units'] }} </td>
+                 <td style="padding-left:10px"> Mínimo Valor para toma válida</td></tr>
+          </table>
+          * Los disparos se fijan directamente desde la configuración de la tarea.
+        </div>
+      </div>
+
+    <button class="accordion">Alcance</button>
+          {# taskd['c_task'] #}
+      <div class="panel">
+        <div class="m_field">
+          <table>
+            {% if taskd['c_task'] and 1 == 1 %}
+            <tr><td style="width:200px;">{{ machined['name'] }} </td><td>Partes</td><td>Estado</td><td>Activa</td><td>Inactiva</td></tr>
+            {% endif %}
+            {% for partd in partsd %}
+            <tr><td> -- </td><td>{{ partd['name'] }}</td><td 
+                {% if partd['a_status'] == 1 %}    
+                  style="background-color:#adebad;">
+                  {% elif partd['a_status'] == 2 %}
+                  style="background-color:#ffd1b3">
+                  {% elif partd['a_status'] == 3 %}
+                  style="background-color:#ff99bb">
+                  {% elif partd['a_status'] == 4 %}
+                  style="background-color:#d9d9d9">
+                  {% else %}
+                >
+                {% endif %}
+                </td>
+                <td class="editable"><i class="fa-solid fa-circle-check"></i></td><td class="editable"> </td></tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    <button class="accordion">Datos de configuración de la tarea</button>
+    {# taskd['s_fields'] #}
+      <div class="panel">
+        <div class="m_field">
+          <table>
+            <tr><td style="width:200px;">Potencia de placa: </td>
+                 <td class="editable" style="width:200px;"> {{ s_fields['Rated-Power'][0] }} > Power > {{ s_fields['Rated-Power'][1] }}</td>
+                 <td>kW</td><td></td></tr>
+            <tr><td>Base: </td><td class="editable">{{ s_fields['base'] }}</td>
+                <td></td><td></td></tr>
+            <tr><td>Tipo de Máquina: </td><td  class="editable">{{ s_fields['type'] }}</td>
+                <td></td><td></td></tr>
+            <tr><td>Grupo </td><td  class="output"">{{ s_fields['Group'][0] }} -- {{ s_fields['Group'][1] }}</td>
+                <td></td><td></td></tr>
+          </table>
+        </div>
+      </div>
+    <button class="accordion">Descripción / Journal</button>
+      <div class="panel">
+        <div class="m_field">
+          <table>
+            <tr><td style="width:200px;min-width:200px;">Descripción: </td><td class="d_value" style="width:82%;min-width:280px;">{{ taskd['help'] }}</td>
+                 <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+          </table>
+          Journal
+          <div class="journal">
+            La últimos movimivientos de las cosas <br>
+            Primera linea<br>
+            Segunda linea<br>
+            Tercera linea<br>
+            Cuarta Linea<br>
+            Quita Linea<br>
+            Sexta Linea<br>
+            Séptima Linea<br>
+            Octava Linea<br>
+            Novena Linea<br>
+            Décima Linea<br>
+          </div>
+        </div>        
+          <div id="visual_des">
+            <a href="#">Ver todo</a>
+            <a href="#">+Ingresar evento</a> 
+          </div>
+      </div>   
+  </div>
+
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+</script>
+
+{% endblock %}

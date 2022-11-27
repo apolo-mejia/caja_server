@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/machine.css')}} ">
+{% endblock %}
+{% block content %}
+  <h2 style="width:100%; margin: 0 auto;">{{ machined['name']}}</h2>
+  <div id="components_cont">
+    {% for partd in partsd  %}
+       <a href="{{ url_for('part', id_p=partd['id']) }}"
+      {% if partd['a_status'] == 1 %}    
+          style="background-color:#adebad;">
+        {% elif partd['a_status'] == 2 %}
+          style="background-color:#ffd1b3">
+        {% elif partd['a_status'] == 3 %}
+          style="background-color:#ff99bb">
+        {% elif partd['a_status'] == 4 %}
+          style="background-color:#d9d9d9">
+        {% else %}
+          >
+      {% endif %}
+      <img src="{{ url_for('static', filename='images/avatars/parts/')}}{{partd['avatar']}}">
+    </a>
+    {% endfor %}
+    <a href="#">
+      <img src="{{ url_for('static', filename='images/plus.png') }} " style="width:64px; heigth:64px; "alt="Ingresar un componente">
+    </a>
+  </div>
+
+  </div>
+  <div id="contend">
+    <div id="visual_des">
+      <a href="#">picture</a>
+      <a href="#">avatar</a>
+    </div>
+    <button class="accordion">Tareas Globales</button>
+      <div class="panel">
+        {% for taskd in tasksd %}
+          <div id="components_cont">
+            <a href='#'>
+              <img src="{{ url_for('static', filename='images/avatars/tasks/') }}{{taskd['avatar']}}" style="width:64px; heigth:64px;"> 
+            </a>
+            {{ taskd['name'] }} <br>
+          </div>
+        {% endfor %}
+      </div>
+    <button class="accordion">Datos de placa</button>
+      <div class="panel">
+        <div class="m_field">
+          <table>
+            <tr><td style="width:200px;">Potencia en kW: </td><td class="c_value">{{ machined['kw_nom'] }}</td><td><b>kilo Watts</b></td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Voltaje nominal: </td><td  class="c_value">{{ machined['v_nom'] }}</td><td><b>Volts</b></td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Corriente nominal: </td><td class="c_value">{{ machined['i_nom'] }}</td><td><b>Amperios</b></td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Número de fases: </td><td  class="c_value">{{ machined['n_phases'] }}</td><td><b>Fases</b></td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Frecuencia nominal: </td><td  class="c_value">{{ machined['f_nom'] }}</td><td><b>Hertz</b></td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Número de polos: </td><td class="c_value">{{ machined['n_poles'] }}</td><td><b>Polos</b></td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Clase IP: </td><td  class="c_value">{{ machined['ip_class'] }}</td><td><b> Clase IP</b></td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Clase/Tipo NEMA: </td><td class="c_value">{{ machined['nema_class'] }}</td><td><b> Clase NEMA</b></td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Carcasa / Housing: </td><td class="c_value">{{ machined['housing'] }}</td><td><b> Material</b></td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+          </table>
+        </div>
+      </div>
+    <button class="accordion">Datos de referencia</button>
+      <div class="panel">
+        <div class="m_field">
+          <table>
+            <tr><td style="width:200px;">Nombre: </td><td class="r_value">{{ machined['name'] }}</td>
+                 <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Marca: </td><td  class="r_value">{{ machined['brand'] }}</td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Modelo: </td><td  class="r_value">{{ machined['model'] }}</td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Serial: </td><td class="r_value">{{ machined['m_serial'] }}</td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>Serial Interno/#Inventario: </td><td  class="r_value">{{ machined['i_serial'] }}</td>
+                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+          </table>
+        </div>
+      </div>
+    <button class="accordion">Descripción / Journal</button>
+      <div class="panel">
+        <div class="m_field">
+          <table>
+            <tr><td style="width:200px;min-width:200px;">Descripción: </td><td class="d_value" style="width:82%;min-width:280px;">{{ machined['description'] }}</td>
+                 <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+          </table>
+          Journal
+          <div class="journal">
+            La últimos movimivientos de las cosas <br>
+            Primera linea<br>
+            Segunda linea<br>
+            Tercera linea<br>
+            Cuarta Linea<br>
+            Quita Linea<br>
+            Sexta Linea<br>
+            Séptima Linea<br>
+            Octava Linea<br>
+            Novena Linea<br>
+            Décima Linea<br>
+          </div>
+        </div>        
+          <div id="visual_des">
+            <a href="#">Ver todo</a>
+            <a href="#">+Ingresar evento</a> 
+          </div>
+      </div>   
+  </div>
+
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+</script>
+
+{% endblock %}

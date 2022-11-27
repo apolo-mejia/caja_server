@@ -152,3 +152,12 @@ def write_flag(flag, state, args):
 #f.write(arg)
     f.close()
 
+
+# FUNCIONES PARA LA INTEFACE DEL MONITOREO
+
+# Afiliar todas las partes de una maquina a la misma tarea eg. ISO 10816
+def get_machine_task(mask, machine):
+    if mask&1 == 1 and 1 == machine :
+       overal = 1
+       machine = machine
+    return  str

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css')}} ">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.css')}} ">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/brands.css')}}" >
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/solid.css' )}}" >
+    <title> {% block title %}{% endblock %} - My webpage </title>
+  {% endblock %}
+</head>
+<body>
+  <div id="header_cont">
+    <div id="avatar" > <img src="{{ url_for('static', filename='images/avatar.png')}}" 
+      alt="Usuario" width="60" height="70">
+    </div>
+    <div id="user_data">
+      <br>
+      <b>Usuario: </b> <a href="#"> apolo </a> <br>
+      <b>Perfil: </b> usuario de soporte <br>
+      <b>rol: </b> administrador
+    </div>
+    <div id="nav">
+      <ul id="navi">
+        <li class="scope">
+          <a href="#" >
+            <b><i class="fa-solid fa-industry fa-2x"></i> PLANTA <i class="fa-solid fa-arrow-right-from-bracket"></i><b>
+            <span>  
+            </span>
+          </a>
+        </li>
+        <li class="scope">
+          <a href="#">
+            <b><i class="fa-solid fa-microchip fa-2x"></i> PROCESO <i class="fa-solid fa-arrow-right-from-bracket"></i></b>
+            <span>
+            </span>
+          </a>
+        </li> 
+        {% if nav_menu == 3 %}
+           <li class="scope_a">
+        {% else %}
+           <li class="scope">
+        {% endif %}
+          <a href="#">
+            <b><i class="fa-solid fa-tractor fa-2x"></i> MÁQUINA <i class="fa-solid fa-arrow-right-from-bracket"></i></b>
+            <span>
+            </span>
+          </a>
+        </li>
+        {% if nav_menu == 4 %}
+           <li class="scope_a">
+        {% else %}
+           <li class="scope"> 
+        {% endif %}        
+          <a href="#">
+            <b><i class="fa-solid fa-robot fa-2x"></i> PARTE <i class="fa-solid fa-arrow-right-from-bracket "></i></b>
+            <span>
+            </span>
+          </a>
+        </li> 
+        {% if nav_menu == 5 %}
+          <li class="scope_a">
+        {% else %}
+          <li class="scope">
+        {% endif %}
+          <a href="#">
+            <b><i class="fa-solid fa-list-check fa-2x"></i> TAREAS <i class="fa-solid fa-arrow-right-from-bracket "></i></b>
+            <span>
+            </span>
+          </a>
+        </li>
+        <li class="scope">
+          <a href="#">
+            <b><i class="fa-solid fa-mobile fa-2x"></i> SENSOR </b>
+            <span>
+            </span>
+          </a>
+        </li>      
+      </lu>
+    </div>
+    <div id="user_top">
+      <a href="#" >   
+        <b><i class="fa-solid fa-circle-nodes fa-6x" ></i></b>
+        Red/Servicios
+      </a>
+    </div>
+  </div>
+  <div id="content">{% block content %} {% endblock %} </div>
+  <div id="footer_cont">
+    {% block footer %}
+      Desarollado 100% en <i class="fab fa-creative-commons"></i>
+    {% endblock %}
+  <div class="icon-bar">
+    <a href="#" target="_blank"><i class="fa fa-home"></i></a> 
+    <a href="https://github.com/apolo-mejia" target="_blank"><i class="fab fa-github-alt"></i></a> 
+    <a href="mailto:mejia.m2m@gmail.com" target="_blank"><i class="fa fa-envelope"></i></a> 
+    <a href="http://central1.myddns.me/proyecto/" target="_blank"><i class="fa fa-globe"></i></a>
+    <a href="#" target="_blank"><i class="fa fa-headset"></i></a> 
+  </div>
+  </div>
+</body>
+</html>

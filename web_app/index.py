@@ -9,9 +9,11 @@ from functions import *
 from forms import *
 from medidas_gen import *
 from req_sensors import *
-import time
-
-import random
+from queries import *
+from schedule import *
+#import time
+import json
+#import random
 
 app = Flask(__name__)
 app.config['SECRET_KEY']='MySEcuRiTY71315404kEyI2'
@@ -362,6 +364,40 @@ def sensor():
         return redirect("/1/"+file2send+"/show_measure")
 #        return render_template('net_conf.html')
     return render_template("sensor.html", form = form)
+
+@app.route('/<int:id_m>/machine')
+def machine(id_m):
+    machined = get_machine(id_m)
+    tasksd = get_machine_scope_task(id_m)
+    partsd = get_machine_parts(id_m)
+    nav_menu = 3
+    return render_template("machine.html", machined=machined, partsd=partsd, nav_menu=nav_menu, tasksd=tasksd)
+
+@app.route('/<int:id_p>/part')
+def part(id_p):
+    partd = get_part(id_p)
+    machined = get_machine(partd['id_machine'])
+# info tareas asociadas
+    drop = get_machine_task(partd['c_task'],machined['id'])
+    print (drop)
+# info de plantilla
+    s_fields = json.loads(partd['s_fields'])
+# info menu de navegacion
+    nav_menu = 4
+    return render_template('part.html', machined=machined, partd=partd, s_fields=s_fields, nav_menu = nav_menu)
+
+@app.route('/<int:id_t>/task')
+def task(id_t):
+    taskd = get_task(id_t)
+    machined = get_machine(taskd['id_machine'])
+    partsd = get_machine_parts(id_t)
+# info del time-table
+    w_block = gen_week_block(id_t)
+# info de los items especificos
+    s_fields = json.loads(taskd['s_fields'])
+    nav_menu = 5
+    return render_template("task.html", machined=machined, partsd=partsd, nav_menu=nav_menu, taskd=taskd, w_block=w_block, s_fields=s_fields)
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug = True)
