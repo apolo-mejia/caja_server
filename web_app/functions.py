@@ -3,6 +3,7 @@ from flask import url_for
 import csv
 import subprocess
 import time
+import os
 
 def wifi_scan():
     nets = []
@@ -161,3 +162,11 @@ def get_machine_task(mask, machine):
        overal = 1
        machine = machine
     return  str
+
+# Extrae los documentos por tipo desde un a ruta
+def get_files_by_ext(path,ext):
+    result = []
+    for x in  os.listdir(path): 
+        if x.endswith(ext):
+           result.append(x)
+    return result

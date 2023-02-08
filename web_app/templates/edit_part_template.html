@@ -1,0 +1,90 @@
+<style>
+    .d_table{
+        font: 11px Arial, sans-serif;
+    }
+    .tag {
+        background-color:#cce6ff; 
+        margin:1px;
+        padding:1px; 
+        border:1px solid transparent;
+        border-radius:3px;
+    }
+    #fila {
+        font: 11px Arial, sans-serif;        
+    }
+</style>
+<body>
+<h3>Editar un template</h3>
+
+<table class="d_table">
+    <tr><td style="width:198px;">{{form.name.label}}</td><td style="width:198px;">{{part_t['name']}}</td>
+        <td rowspan="10" style="border: 1px solid black;">
+        <img width="128px" heigth="128px" src="{{ url_for('static', filename='images/avatars/parts/default/')}}{{part_t['avatar']}}">
+        </td>    
+    </tr>
+    <tr><td>{{form.type.label}}</td><td>{{part_t['type']}}</td><td> </td></tr>
+    <tr><td>{{form.users.label}}</td><td>{{part_t['users']}}</td><td></td></tr>
+    <tr><td rowspan="3">Categorias</td><td>{{form.basic.label}}</td><td></td></tr>
+    <tr><td>{{form.movil.label}}</td><td></td></tr>
+    <tr><td>{{form.fixed.label}}</td><td></td></tr>
+    <tr><td>{{form.brand.label}}</td><td></td><td></td></tr>
+    <tr><td>{{form.model.label}}</td><td></td><td></td></tr>
+    <tr><td>{{form.m_serial.label}}</td><td></td><td></td></tr>
+    <tr><td>{{form.description.label}}</td><td>{{part_t['description']}}</td><td></td></tr>
+    <tr><td colspan="3">{{form.s_fields.label}}</td></tr>
+</table>
+<table class="d_table">
+<table id="fila">
+   
+</table>
+
+<table class="d_table">
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {{form2.hidden_tag()}}
+        <tr><td>{#form2.avatar_name.label#}</td><td>{{form2.avatar_name(value=part_t['name'], style="display:none")}}<br></td>
+        {% for error in form2.avatar_name.errors %}
+          <span style="color:red;"> {{ error }} </span> <br>
+        {% endfor %}
+    </tr>
+    <tr><td>{{form2.avatar_up.label}}</td><td>{{form2.avatar_up(style="font:11px Courier New;")}}<br></td>
+        {% for error in form2.avatar_up.errors %}
+          <span style="color:red;"> {{ error }} </span> <br>
+        {% endfor %}
+    </tr>
+    <tr><td></td><td>{{ form2.submit_avatar()}}</td></tr>
+    </form>
+</table>
+<div id="fuera"></div>
+</body>
+<script>
+datos = {{ s_fields | tojson }};
+//JSON.parse
+const fuera = document.getElementById("fuera");
+const fila = document.getElementById("fila");
+
+for (let x in datos){
+  //fuera.innerHTML += datos[x][1] + " ";
+  if (datos[x][3] == "select"){
+    var campop = JSON.parse(datos[x][5]);
+    var flen = campop.length;
+        let text = "<select>";
+        for (let i=0; i<flen; i++) {
+           text += "<option>" + campop[i] + "</option>";
+        }
+        text += "</select>";
+    fila.innerHTML += "<tr><td style='text-align:center; padding:3px;'> <span class='tag'>" + x + "</span></td>" +
+                "<td style='width:120px;'>" + datos[x][1] + "</td>" +
+                "<td>" + text +"</td><td>"
+                + datos[x][4] + "</td><td>" + datos[x][7] + "</td></tr>";
+  }else{
+    fila.innerHTML += "<tr><td style='text-align:center; padding:3px;'> <span class='tag'>" + x + "</span></td>" +
+                "<td style='width:120px;'>" + datos[x][1] + "</td>" +
+                "<td><input type='text' value='" + datos[x][5] + "' size='12'></td><td>" + datos[x][4] + "</td>"+
+                "<td>" + datos[x][7] + "</td></tr>";
+        }
+}
+
+// de inicio
+fuera.innerHTML += "<br>" + JSON.stringify(datos);
+
+</script>

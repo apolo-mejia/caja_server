@@ -1,0 +1,390 @@
+<style>
+#titulo { 
+  grid-area: titulo;
+  font-size: 14px;
+}
+#index { grid-area: index;}
+#reference { grid-area: reference;}
+#description_f {grid-area: description_f;}
+#s_field {grid-area: s_field}
+#avatar { grid-area: avatar; }
+#foto { grid-area: foto; }
+#help_box { grid-area: help; }
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'titulo titulo titulo titulo titulo titulo'
+    'index index index index index index'
+    'reference reference reference reference reference reference'
+    'description_f description_f description_f description_f description_f description_f'
+    's_field s_field s_field s_field s_field s_field'
+    'avatar avatar avatar foto foto foto'
+    'help help help help help help';
+  gap: 1px;
+  background-color: #2196F3;
+  padding: 5px;
+  margin-left: 20px;
+}
+.grid-container > div {
+  background-color: white;
+  padding: 1px 0;
+}
+.tag {
+  background-color:#cce6ff; 
+  margin:1px;
+  padding:1px; 
+  border:1px solid transparent;
+  border-radius:3px;
+}
+.t_header{
+  width: 97%; 
+  background-color: silver; 
+  margin: 4px; 
+  padding: 3px;
+}
+.c_table{
+  font: 11px Courier New; 
+  width:100%;
+}
+</style>
+<body>
+  <div style="float:left; border: 1px solid silver; border-radius: 5px; font: 11px Courier New;">
+  <form method="post" enctype="multipart/form-data" novalidate>
+    <div class="t_header">Datos de Indexación </div>
+    <div id="index_t">
+    <table class="c_table">
+      {{ form.hidden_tag() }}
+      <tr><td style="width:198px;">{{ form.name.label }}</td><td style="width:198px">{{ form.name(size=16, style="font: 11px Courier New;")}}</td></tr>
+      <tr><td>{{ form.type.label }}</td><td> {{ form.type(style="font: 11px Courier New;") }} </td></tr>
+      <tr><td>{{ form.users.label }}</td><td> {{ form.users(style="font: 11px Courier New;") }} </td></tr>
+      <tr><td>Categorias</td><td>
+      {{form.basic()}}{{form.basic.label}}<br>{{form.movil()}}{{form.movil.label}}<br>{{form.fixed()}}{{form.fixed.label}}
+      </td></tr>
+    </table>
+    </div>
+    <div class="t_header">Datos de Referencia </div>
+    <div id="reference_t">
+      <table style="font: 11px Courier New;">
+      <tr>
+        <td style="width:198px;">{{ form.brand.label }}</td>
+        <td>{{ form.mano_list(style="font : 11px Courier New;") }}</td>
+      </tr>
+      <tr>
+        <td style="width:198px;">{{ form.brand(size=16, value="No definido", style="font: 11px Courier New;") }}</td>
+        <td> -- </td>
+      </tr>
+      <tr id="mano_moto" style="display:none">
+        <td style="width:198px"> {{ form_mano.motores.label }} </td>
+        <td> {{ form_mano.motores(style="font: 11px Courier New;") }}</td>
+      </tr>
+      <tr id="mano_sopo" style="display:none" >
+        <td style="width:198px" > {{ form_mano.soportes.label }} </td>
+        <td> {{ form_mano.soportes(style="font: 11px Courier New;") }}</td>
+      </tr>
+      <tr id="mano_roda" style="display:none" >
+        <td style="width:198px"> {{ form_mano.rodamientos.label }} </td>
+        <td> {{ form_mano.rodamientos(style="font: 11px Courier New;") }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.model.label }}</td>
+        <td>{{ form.model(size=16, value="No definido", style="font: 11px Courier New;") }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.m_serial.label }}</td>
+        <td>{{form.m_serial(size=16, value="No definido", style="font: 11px Courier New;") }}</td>
+      </tr>
+    </table>
+    </div>
+    <div class="t_header">Datos Descripción </div>
+    <div id="description_t">
+    <table class="c_table">
+      <tr><td style="width:198px;">{{ form.description.label }}</td><td style="width:198px;"></td></tr>
+      <tr><td colspan="2"> {{ form.description(cols='40', rows='3') }}</td></tr>
+    </table>
+    </div>
+    <div class="t_header">Campos Especificos de la parte.<br> (pueden estar compartidos con la tarea)</div>
+    <div id="sfields_t">
+    <table style="font: 11px Courier New; width:100%;">
+      <tr><td>{{form3.s_key.label}}</td><td>{{form3.s_key(style="font: 11px Courier New;", size=13) }}</td>
+          <td>{{form3.s_important.label}}</td><td>{{form3.s_important(style="font: 11px Courier New;")}}</td>
+      </tr>
+      <tr><td>{{form3.s_name.label}}</td><td>{{form3.s_name(style="font: 11px Courier New;", size=13)}}</td><td>-</td><td>-</td></tr>
+      <tr><td>{{form3.s_description.label}}</td><td colspan="3">{{form3.s_description(style="font: 11px Courier New;", size=35)}}</td></tr>
+      <tr><td>{{form3.s_dim.label}}</td><td>{{form3.s_dim(style="font: 11px Courier New;")}}</td>
+          <td colspan="2">{{form3.s_units(style="font: 11px Courier New;")}}</td>
+      </tr>
+      <tr><td>{{form3.s_type.label}}</td><td>{{form3.s_type(style="font: 11px Courier New;")}}</td>
+          <td></td>
+      </tr>
+      <tr><td>{{form3.s_value_def.label}}</td><td colspan="3">{{form3.s_value_def(style="font: 11px Courier New;", size=13)}}</td></tr>
+      <tr><td></td><td colspan="2"><button type="button" id="campo">Ingresar campo</button></td><td>-</td></tr>
+    </table>
+    </div>
+    <div style="display:none;">
+    <table class="c_table">
+      <tr><td style="width:198px;">{{ form.s_fields.label }}</td><td style="width:198px;"></td></tr>
+      <tr><td colspan="2"> {{ form.s_fields(cols='40', rows='3') }}</td></tr>
+    </table>
+    </div>
+      <div class="t_header">Actualizar / Crear Plantilla </div>
+    <table class="c_table">
+      <tr><td><button type="button" id="update">Actualizar</button></td><td colspan="2">{{ form.submit_p_t() }}</td><td>-</td></tr>
+    </table>
+  </form>
+  </div>
+  <div style="float:left; width:500px; font: 11px Courier New;">
+    <div class="grid-container" >
+      <div id="titulo">Nombre del template: </div>
+      <div id="index">
+        <table style="width:100%; font-size: 11px;">
+          <tr><td style="width:25%; margin: 5px;">Tipo</td><td id="tipo" style="width:25%; border: 1px solid blue;"></td>
+              <td style="width:25%; margin: 5px;">Usuario</td><td id="usuario" style="width:25%; margin: 5px; border: 1px solid blue"></td></tr>
+          <tr><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Categorias</td><td colspan ="3" id="categorias" ></td></tr>
+        </table>
+      </div>
+      <div id="reference">
+        datos de referencia
+        <table style="width:100%; font-size: 11px;">
+          <tr><td></td><td></td>
+              <td style="width:16%; margin: 5px;">Marca</td><td id="marca" style="width:16%; border: 1px solid blue;"></td>
+              <td style="width:16%; margin: 5px;">Modelo</td><td id="modelo" style="width:16%; margin: 5px; border: 1px solid blue"></td>
+              <td style="width:16%; margin: 5px;">Serial</td><td id="serie" style="width:16%; margin: 5px; border: 1px solid blue"></td>
+          </tr>
+         </table>
+      </div>
+      <div id="description_f">
+        la descripción
+      </div>
+      <div id="s_field">
+        Campos especificos
+        <table id="fila" style="width:100%; font-size: 11px;">
+
+        </table>
+      </div>
+      <div id="avatar">
+          <div id="avatar_cont">
+            
+          </div>
+      </div>
+      <div id="foto">Foto</div>
+      <div id="help_box">Help box</div>
+    </div>
+  </div>
+<div id="fuera">
+  {% for error in form.name.errors %}
+  <span style="color:red">{{error}}</span><br>
+  {% endfor %}
+</div>
+</body>
+<script>
+  // Comencemos declarando todas las variables 
+  const name = document.getElementById("name");
+  const type = document.getElementById("type");
+  const users = document.getElementById("users");
+  const basic = document.getElementById("basic");
+  const movil = document.getElementById("movil");
+  const fixed = document.getElementById("fixed");
+  const mano_list = document.getElementById("mano_list");
+  const mano_sopo = document.getElementById("mano_sopo");
+  const soportes = document.getElementById("soportes");
+  const rodamientos = document.getElementById("rodamientos");
+  const motores = document.getElementById("motores")
+  const mano_moto = document.getElementById("mano_moto");
+  const mano_roda = document.getElementById("mano_roda");
+  const brand = document.getElementById("brand");
+  const model = document.getElementById("model");
+  const m_serial = document.getElementById("m_serial");
+  const description = document.getElementById("description");
+  const s_key = document.getElementById("s_key");
+  const s_name = document.getElementById("s_name");
+  const s_dim = document.getElementById("s_dim");
+  const s_type = document.getElementById("s_type");
+  //const s_list_td = document.getElementById("s_list_td");
+  const s_units = document.getElementById("s_units");
+  const s_value_def = document.getElementById("s_value_def");
+  const s_important = document.getElementById("s_important");
+  const s_description = document.getElementById("s_description");
+  const campo = document.getElementById("campo");
+  const update = document.getElementById("update");
+  const submit_p_t = document.getElementById("submit_p_t");
+  
+  const reference_t = document.getElementById("reference_t");
+  const index_t = document.getElementById("index_t");
+  const description_t = document.getElementById("description_t");
+  const sfields_t = document.getElementById("sfields_t");
+  //const avatar_t = document.getElementById("avatar_t");
+  const s_fields = document.getElementById("s_fields");
+
+  const help_box = document.getElementById("help_box");
+  const titulo = document.getElementById("titulo");
+  const tipo = document.getElementById("tipo");
+  const usuario = document.getElementById("usuario");
+  const categorias = document.getElementById("categorias");
+  const marca = document.getElementById("marca");
+  const modelo = document.getElementById("modelo");
+  const serie =document.getElementById("serie");
+  const description_f = document.getElementById("description_f");
+  const s_field = document.getElementById("s_field");
+  const fila =document.getElementById("fila");
+  const avatar_cont = document.getElementById("avatar_cont");
+  const avatar_name = document.getElementById("avatar_name");
+  const fuera = document.getElementById("fuera");
+    // Como entran las varibles por default
+  var estado = 0;
+  var field_pack={};
+    
+  help_box.innerHTML= "Comienza ingresansando algunos los datos básicos para indexar la maquina: Nombre, tipo, usuario y las 'Key Words' con que se pueda etiquetar la parte." ;
+  reference_t.style.display="none";
+  description_t.style.display="none";
+  //avatar_t.style.display="none";
+  sfields_t.style.display="none";
+
+  campo.disabled=true;
+  submit_p_t.disabled=true;
+  avatar_cont.style.display="block";
+    
+    // El actualizador de la ficha
+  update.addEventListener("click",function () {actualizar(estado);});
+  function actualizar(state){
+    if (state == 0 && name.value != "") { 
+      titulo.innerHTML = "<b>" + name.value + "</b>";
+      titulo.style.textAlign = "center";
+      titulo.style.backgroundColor = "#ccffcc";
+      tipo.innerHTML = "<b>" + type.value + "</b>";
+      tipo.style.backgroundColor = "#ccffcc";
+      usuario.innerHTML = "<b>" + users.value + "</b>";
+      usuario.style.backgroundColor ="#ccffcc";
+      if (basic.checked == true){
+        categorias.innerHTML += "<span class='tag'> Básicas </span>";
+      }else{      }
+      if (movil.checked == true){
+        categorias.innerHTML += "<span class='tag'> Móviles </span>";
+      }else{      }
+      if (fixed.checked == true){
+        categorias.innerHTML += "<span class='tag'> Fijas </span>";
+      }else{      }
+      reference_t.style.display="block";
+      index_t.style.display="none";
+      
+      //avatar_cont.style.display="block";
+        // avatar_name.value = name.value + ".png";
+      
+      help_box.innerHTML="Edita si es necesario los campos de referencia de la plantilla de tu parte";
+      estado=1;
+    }else if(state==1){
+      marca.innerHTML = brand.value;
+      modelo.innerHTML = model.value;
+      serie.innerHTML = m_serial.value;
+      reference_t.style.display= "none";
+      description_t.style.display = "block";
+      estado=2;
+    }else if(state==2){
+      description_f.innerHTML=description.value;
+      description_t.style.display="none";
+      campo.disabled=false;
+      update.disabled=true;
+      sfields_t.style.display="block";
+      state=3;
+    }else if(state==3){
+      description_f.innerHTML=description.value;
+    }else{
+      help_box.innerHTML = "El campo <b> Nombre </b> del template es obligatorio";
+    }
+  }
+    s_type.addEventListener("change",function(){
+      var t_campo = s_type.value
+      if (t_campo == "select"){
+        s_value_def.size = 35;
+        s_value_def.value= '["valor1","valor2","valor3"]';
+      }else{}
+    })
+    campo.addEventListener("click", function(){
+      if (s_name.value==""){
+        help_box.innerHTML = "El campo <b> NOMBRE </b> es obligatorio";
+      }else if(s_key.value==""){
+        help_box.innerHTML ="El campo <b> Key_word </b> es obligatorio"; 
+      }else{
+        submit_p_t.disabled=false;
+      //  avatar_t.style.display="blocK";
+        field_pack[s_key.value]=[s_key.value,s_name.value,s_dim.value,s_type.value,s_units.value,s_value_def.value,s_important.checked,s_description.value];      
+        add_field(field_pack);
+      }
+    })
+    
+    function add_field(datos){
+      if (datos[s_key.value][3] == "select"){
+        var campop = JSON.parse(datos[s_key.value][5]); 
+        var flen = campop.length;
+        let text = "<select style= 'font: 11px Courier New; width:120px;' >";
+         for (let i=0; i<flen; i++) {
+           text += "<option>" + campop[i] + "</option>";
+         }
+        text += "</select>";
+        if (datos[s_key.value][6] == true){
+          fila.innerHTML += "<tr style='background-color:orange; height:25px;' ><td><span class='tag'>"+datos[s_key.value][0]+"</span></td><td>"+ datos[s_key.value][1] + "</td>" +
+          "<td>"+text+"</td><td>"+ datos[s_key.value][4]+"</td><td style='width:50%'>"+
+          datos[s_key.value][7]+"</td></tr>";
+        }else{
+          fila.innerHTML += "<tr style='height:25px;'><td><span class='tag'>"+datos[s_key.value][0]+"</span></td><td>"+ datos[s_key.value][1] + "</td>" +
+          "<td>"+text+"</td><td>"+ datos[s_key.value][4]+"</td><td style='width:50%'>"+
+          datos[s_key.value][7]+"</td></tr>";
+        }
+      }else{
+        let text = "<input ";
+        text += "type='text' size='13' style='font: 11px Courier New;' ></input>";
+        if (datos[s_key.value][6] == true){
+          fila.innerHTML += "<tr style='background-color:orange;height:25px;'><td><span class='tag'>"+datos[s_key.value][0]+"</span></td><td>"+ datos[s_key.value][1] + "</td>" +
+          "<td>"+text+"</td><td>"+ datos[s_key.value][4]+"</td><td style='width:45%'>"
+          +datos[s_key.value][7]+"</td></tr>";
+        }else{
+          fila.innerHTML += "<tr style='height:25px;'><td><span class='tag'>"+datos[s_key.value][0]+"</span></td><td>"+ datos[s_key.value][1] + "</td>" +
+          "<td>"+text+"</td><td>"+ datos[s_key.value][4]+"</td><td style='width:45%'>"
+          +datos[s_key.value][7]+"</td></tr>";
+        }
+      }
+      s_key.value = "";
+      s_name.value = "";
+      s_description.value = "";
+      s_value_def.value= "";
+      s_type.value = "int";
+      s_dim.value = "ad";
+      s_units.value = "none";
+      s_important.checked = false;
+      fuera.innerHTML = JSON.stringify(field_pack);
+      s_fields.value= JSON.stringify(field_pack);
+    }
+  mano_list.addEventListener("change", function(){
+    this.style.backgroundColor = "yellow";
+    if (this.value == "mano_soporte") {
+      mano_sopo.style.display = "";
+      mano_moto.style.display = "none";
+      mano_roda.style.display = "none";
+      brand.value = "soportes";
+    }else if(this.value == "mano_rodamiento") {
+      mano_sopo.style.display = "none";
+      mano_moto.style.display = "none";
+      mano_roda.style.display = "";
+      brand.value = "rodamientos";
+    }else if(this.value == "mano_motor") {
+      mano_sopo.style.display = "none";
+      mano_moto.style.display = "";
+      mano_roda.style.display = "none";
+      brand.value = "motores";
+    }else{
+      mano_sopo.style.display = "none";
+      mano_moto.style.display = "none";
+      mano_roda.style.display = "none";
+    }
+  })
+  soportes.addEventListener("change", function(){
+    brand.value = this.value;
+  })
+  motores.addEventListener("change", function(){
+    brand.value = this.value;
+  })
+  rodamientos.addEventListener("change", function(){
+    brand.value = this.value;
+  })
+  </script>

@@ -8,8 +8,8 @@
   <h2 style="width:100%; margin: 0 auto;">{{ machined['name']}}</h2>
   <div id="components_cont">
     {% for partd in partsd  %}
-       <a href="{{ url_for('part', id_p=partd['id']) }}"
-      {% if partd['a_status'] == 1 %}    
+       <a href="{{ url_for('part', id_p=partd['id'], rol=0) }}"
+        {% if partd['a_status'] == 1 %}    
           style="background-color:#adebad;">
         {% elif partd['a_status'] == 2 %}
           style="background-color:#ffd1b3">
@@ -20,11 +20,11 @@
         {% else %}
           >
       {% endif %}
-      <img src="{{ url_for('static', filename='images/avatars/parts/')}}{{partd['avatar']}}">
+      <img width="60px" height="60px" src="{{ url_for('static', filename='images/avatars/parts/local/')}}{{partd['avatar']}}">
     </a>
     {% endfor %}
     <a href="#">
-      <img src="{{ url_for('static', filename='images/plus.png') }} " style="width:64px; heigth:64px; "alt="Ingresar un componente">
+      <img src="{{ url_for('static', filename='images/plus.png') }} " style="width:64px; height:64px; "alt="Ingresar un componente">
     </a>
   </div>
 

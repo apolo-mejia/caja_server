@@ -1,8 +1,8 @@
 #components_cont{
   float: left;
   width: 100%;
-  heigth:130px;
-  min-heigth: 100px;
+  height:130px;
+  min-height: 100px;
   border: 1px solid blue;
   border-radius: 4px;
   min-width: 670px;
@@ -26,8 +26,8 @@
 #contend{
   float: left;
   width: 100%;
-  heigth: auto;
-  min-heigth: 100px;
+  height: auto;
+  min-height: 100px;
   border: 1px solid transparent;
   border-radius: 4px;
   min-width: 670px;
@@ -137,8 +137,64 @@
   border:1px solid #8099ff;
   border-radius: 4px;
   width: 99%;
-  heigth: 120px;
+  height: 120px;
   min-height: 30px;
   max-height: 130px;
   padding: 2px 5px 2px 5px;
+}
+/* Acodiones que se pueden editar */
+.accordion2 {
+  background-color: #d2d2d2;
+  color: black;
+  cursor: pointer;
+  padding: 8px 8px 4px 10px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  transition: 0.6s;
+  border-bottom: 2px solid gray ;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active2, .accordion2:hover {
+  background-color: #a6a6a6;
+}
+.accordion2:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  font-size: 12px;
+  color: black;
+  float: right;
+  margin-left: 5px;
+}
+
+.active2:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+/* Estilos para pasar a base.html */ 
+#rol_button {
+  background-color: #e6ebff;
+  border: 1px solid blue;
+  float:right; 
+  border-radius: 10px;
+  height:49px;
+  width:100px;
+  vertical-align: middle;
+  line-height: 49px; 
+  text-align: center;
+} 
+#rol_button a:hover{
+  background-color: #8099ff;
+  border-radius: 10px;
+  display: block;
+}
+#rol_button a:visited{
+  text-decoration: none;
+  color:black;
+  width:100px;
+  height: 49px;
+}
+#rol_button a:link{
+  text-decoration: none;
 }

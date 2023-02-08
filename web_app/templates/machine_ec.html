@@ -1,0 +1,463 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/machine.css')}} ">
+{% endblock %}
+{% block content %}
+<h3 style="width:100%; margin: 0 auto;">
+  {% if machined['a_status'] == 6 %}
+  Agregar partes de la maquina {{ machined['name'] }}
+  {% else %}
+  Crear una nueva Máquina
+  {% endif %}
+</h3>
+<div id="ppal_field">
+  <form method='POST' novalidate>
+    <table style="width:100%">
+      {{ form.hidden_tag() }}
+      <tr>
+        <td style="width:180px; min-width:150px">{{ form.name.label }}</td>
+        <td id="m_name_box">
+          {% if machined['a_status'] == 6 %}
+          {{ form.name(size=11, disabled=True, value=machined['name']) }}
+          {% else %}
+          {{ form.name(size=11) }}
+          {% endif %}
+        </td>
+        <td rowspan="4" style="width:60%; min-width:220px; border: 1px solid #8099ff;" id="help_box">
+          {% for error in form.name.errors %}
+          <span style="color:red;"> {{ error }} </span> <br>
+          {% endfor %}
+          {% for error in form.kw_nom.errors %}
+          <span style="color:red;"> {{ error }} </span> <br>
+          {% endfor %}
+          {% for error in form.rpm_nom.errors %}
+          <span style="color:red;"> {{ error }} </span> <br>
+          {% endfor %}
+        </td>
+        <td rowspan="4" id="avatar_td">
+        {% if machined['a_status'] == 6 %}
+          <img src="{{ url_for('static', filename='images/avatars/machines/default/') }}{{ machined['avatarf'] }}"
+            style="width:100px; height:100px">
+          {% else %}
+        <img id="avatar_img" src="{{ url_for('static', filename='images/avatars/machines/default/maquina_def.png') }}"
+            style="width:100px; height:100px">
+          {% endif %}
+        <td rowspan="4" style="width:auto; border: 1px solid #8099ff; border-radius: 3px;">
+          <img src="{{ url_for('static', filename='images/pictures/machines/default/no_picture.png') }}"
+            style="width:100px; height:100px">
+        </td>
+      </tr>
+      <tr>
+        <td>{{ form.kw_nom.label }}</td>
+        <td id="m_power_box">
+          {% if machined['a_status'] == 6 %}
+          {{ form.kw_nom(style="width:105px", disabled=True, value=machined['kw_nom']) }}
+          {% else %}
+          {{ form.kw_nom(style="width:105px;") }}
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>{{ form.rpm_nom.label }}</td>
+        <td id="m_vel_box">
+          {% if machined['a_status'] == 6 %}
+          {{ form.rpm_nom(style="width:105px;", disabled=True, value=machined['rpm_nom']) }}
+          {% else %}
+          {{ form.rpm_nom(style="width:105px;") }}
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        {% if machined['a_status'] == 6 %}
+        <td style="display:none"> </td>
+        {% else %}
+        <td> {{ form.submit }} </td>
+        {% endif %}
+        <td></td>
+      </tr>
+    </table>
+    <div style="display:none">
+      {{ form.avatarf.label }} {{ form.avatarf(size=11) }}
+    </div>
+  </form>
+</div>
+<div id="avatars_cont">
+  {% for avatar in m_avatars %}
+  <div id="{{avatar[:-4] }}"
+    style="float:left; padding: 5px; border: 1px solid #8099ff; border-radius: 3px; margin-left:4px">
+    <img src="{{ url_for('static', filename='images/avatars/machines/default/') }}{{ avatar }}"
+      style="width:80px; height:80px">
+  </div>
+  {% endfor %}
+</div>
+<div id="components_cont_ec" >
+  {% for part in parts %}
+  <a href="{{ url_for('part', id_p=part['id'], rol=0 ) }}">
+    <img class="part_disp_img" src="{{ url_for('static', filename='images/avatars/parts/local/') }}{{ part['avatar'] }}" >
+    <div class="part_disp_des" style = "text-align: center;">
+      <b>{{ part['name']}}</b><br>
+      {{ part['ordinal'] }} <br>
+      {{ part['description'] }}
+    </div>
+  </a>
+  {% endfor %}
+
+  
+  <div id="part2add" style="float:left; position:relative; width:140px; height: 180px; 
+    min-height: 180px; border: 1px solid silver; border-radius: 4px; margin: 0 5px 0px 0px;">
+    <img id="img2add" src="{{ url_for('static', filename='images/avatars/parts/default/default.png') }}">
+    <div class="part_disp_des" style="font: 10px Courier New; color:black;">
+      <form method='POST' novalidate>
+        {{ formp.hidden_tag() }}
+        <br>
+        {{ formp.name.label }} <br> {{ formp.name(size=12, value=machined['name']+"_parte_"+part_ord ) }} <br> 
+        {{ formp.ordinal.label}} {{ formp.ordinal(style="width:50px;")}} <br>
+        {{ formp.avatarp(size=12) }} 
+        {{ formp.machine_id(value=machined['id'], style="width:50px; display:none") }}
+        {{ formp.submit }}
+      </form>
+    </div>
+  </div>
+  <div id="plus_cont">
+    <img src="{{ url_for('static', filename='images/plus.png') }}" style="width:84px; height:84px;"
+      alt="Ingresar un componente">
+  </div>
+</div>
+
+<div id="parts_disp">
+  {% for part_t in parts_t %}
+  <div id="p_{{ part_t['avatar'][:-4] }}" style="float:left; position:relative; width:110px; height: 200px;
+    min-height: 180px; border: 1px solid brown; border-radius: 4px; margin: 0 5px 0px 0px;">
+    <img class="part_disp_img" src="{{ url_for('static', filename='images/avatars/parts/default/')}}{{part_t['avatar']}}">
+    <div class="part_disp_des">
+      <span style="text-align:center;color:red">
+        <p><b>{{ part_t['name'] }}</b></p>
+      </span>
+      <div style="height: 85px ;text-align:justify; font-size: 10px; overflow: auto;">
+        {{ part_t['description'] }} 
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div id="contend">
+  <button class="accordion" style="display:none;">Tareas Globales </button>
+  <div class="panel">
+    {% for taskd in tasksd %}
+    <div id="task_cont">
+      <a href='#'>
+        <img src="{{ url_for('static', filename='images/avatars/tasks/') }}{{taskd['avatar']}}"
+          style="width:64px; height:64px;">
+      </a>
+      {{ taskd['name'] }} <br>
+    </div>
+    {% endfor %}
+  </div>
+  <button class="accordion" style="display:none;">Datos de placa</button>
+  <div class="panel">
+    <div class="m_field">
+      <table>
+        <tr>
+          <td style="width:200px;">Potencia en kW: </td>
+          <td class="c_value">{{ machined['kw_nom'] }}</td>
+          <td><b>kilo Watts</b></td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+        <tr>
+          <td>Voltaje nominal: </td>
+          <td class="c_value">{{ machined['v_nom'] }}</td>
+          <td><b>Volts</b></td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+        <tr>
+          <td>Corriente nominal: </td>
+          <td class="c_value">{{ machined['i_nom'] }}</td>
+          <td><b>Amperios</b></td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+        <tr>
+          <td>Número de fases: </td>
+          <td class="c_value">{{ machined['n_phases'] }}</td>
+          <td><b>Fases</b></td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+        <tr>
+          <td>Frecuencia nominal: </td>
+          <td class="c_value">{{ machined['f_nom'] }}</td>
+          <td><b>Hertz</b></td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+        <tr>
+          <td>Número de polos: </td>
+          <td class="c_value">{{ machined['n_poles'] }}</td>
+          <td><b>Polos</b></td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+        <tr>
+          <td>Clase IP: </td>
+          <td class="c_value">{{ machined['ip_class'] }}</td>
+          <td><b> Clase IP</b></td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+        <tr>
+          <td>Clase/Tipo NEMA: </td>
+          <td class="c_value">{{ machined['nema_class'] }}</td>
+          <td><b> Clase NEMA</b></td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+        <tr>
+          <td>Carcasa / Housing: </td>
+          <td class="c_value">{{ machined['housing'] }}</td>
+          <td><b> Material</b></td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <button class="accordion" style="display:none;">Datos de referencia</button>
+  <div class="panel">
+    <div class="m_field">
+      <table>
+        <tr>
+          <td style="width:200px;">Nombre: </td>
+          <td class="r_value">{{ machined['name'] }}</td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+        <tr>
+          <td>Marca: </td>
+          <td class="r_value">{{ machined['brand'] }}</td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+        <tr>
+          <td>Modelo: </td>
+          <td class="r_value">{{ machined['model'] }}</td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+        <tr>
+          <td>Serial: </td>
+          <td class="r_value">{{ machined['m_serial'] }}</td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+        <tr>
+          <td>Serial Interno/#Inventario: </td>
+          <td class="r_value">{{ machined['i_serial'] }}</td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <button class="accordion">Descripción / Journal</button>
+  <div class="panel">
+    <div class="m_field">
+      <table>
+        <tr>
+          <td style="width:200px;min-width:200px;">Descripción: </td>
+          <td class="d_value" style="width:82%;min-width:280px;">{{ machined['description'] }}</td>
+          <td><i class="fas fa-pen-alt"></i></td>
+          <td><i class="fas fa-circle-question"></i></td>
+        </tr>
+      </table>
+      Journal
+      <div class="journal">
+        La últimos movimivientos de las cosas <br>
+        Primera linea<br>
+        Segunda linea<br>
+        Tercera linea<br>
+        Cuarta Linea<br>
+        Quita Linea<br>
+        Sexta Linea<br>
+        Séptima Linea<br>
+        Octava Linea<br>
+        Novena Linea<br>
+        Décima Linea<br>
+      </div>
+    </div>
+    <div id="visual_des">
+      <a href="#">Ver todo</a>
+      <a href="#">+Ingresar evento</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // mmm, should be a better practice to add all de var asociated to a DOM object before all the code
+  const part2add = document.getElementById("part2add");
+  const img2dd = document.getElementById("img2add");
+  const plus = document.getElementById("plus_cont");
+  const components_cont = document.getElementById("components_cont");
+  const machiche_id = document.getElementById("machine_id");
+  
+  // default at charging settings
+  part2add.style.display = "none";
+  machine_id.style.display = "none";
+
+  var acc = document.getElementsByClassName("accordion");
+  var i;
+  for (i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function () {
+      this.classList.toggle("active");
+      var panel = this.nextElementSibling;
+      if (panel.style.display === "block") {
+        panel.style.display = "none";
+      } else {
+        panel.style.display = "block";
+      }
+    });
+  }
+
+  // Para el contenedor de las partes
+  var parts = document.getElementById("parts_disp");
+  var avatars_cont = document.getElementById("avatars_cont");
+
+  // Comtenedores que no aparecen por defecto
+  parts.style.display = "none";
+  avatars_cont.style.display = "none";
+
+  plus.addEventListener("mouseover", hoverp);
+  plus.addEventListener("mouseout", leavep);
+  plus.addEventListener("click", show);
+
+  function hoverp() {
+    document.getElementById("plus_cont").style.backgroundColor = "#d9d9d9";
+  }
+  function leavep() {
+    document.getElementById("plus_cont").style.backgroundColor = "transparent";
+  }
+  function show() {
+    if (parts.style.display === "block") {
+      parts.style.display = "none";
+      part2add.style.display= "none";
+    } else {
+      parts.style.display = "block";
+      part2add.style.display= "block";
+      plus.style.display = "none";
+
+    }
+  }
+
+  // Para la help box
+  var help = document.getElementById("help_box");
+  var nombre = document.getElementById("m_name_box");
+  var potencia = document.getElementById("m_power_box");
+  var velocidad = document.getElementById("m_vel_box");
+  var avatar = document.getElementById("avatar_td");
+
+  nombre.addEventListener("mouseover", function () { hoverh("nombre"); });
+  nombre.addEventListener("mouseout", leaveh);
+  potencia.addEventListener("mouseover", function () { hoverh("potencia"); });
+  potencia.addEventListener("mouseout", leaveh);
+  velocidad.addEventListener("mouseover", function () { hoverh("velocidad"); });
+  velocidad.addEventListener("mouseout", leaveh);
+  // estas serían las 3 que se deben apagar
+  avatar.addEventListener("mouseover", hovera);
+  avatar.addEventListener("mouseout", leaveh);
+  avatar.addEventListener("click", showa);
+  
+  const estado = {{ machined['a_status'] | tojson}};
+  if (estado == "6") {
+    avatar.removeEventListener("click", showa);
+    avatar.removeEventListener("mouseout", leaveh);
+    avatar.removeEventListener("mouseover", hovera);
+    help.innerHTML = "--> haz Click en el <b> + </b> para adjuntar al menos una parte de la máquina"
+  }else{
+    components_cont.style.display = "none";
+    help.innerHTML = "--> Ingresa el nombre para tu nueva máquina, <br> " +
+      "--> Ingresa la potencia Nominal de tu máquina, <br> " + 
+      "--> Ingresa las velocadad de giro del motor principal de la maquina, <br>"  +
+      "--> Seleciona uno de los avatares o íconos que mas se ajute a tu máquina. <br>" + 
+      "--| Luego presiona <b>'Crear máquina... '</b> para comenzar a ingresar la partes";
+  }
+
+  function hoverh(campo) {
+    help.style.backgroundColor = "#d9d9d9";
+    if (campo == "nombre") {
+      help.innerHTML = "<i class='fas fa-lightbulb'></i> Ingrese el nombre con el que desea referenciar su máquina, ej: Ventilador principal";
+    } else if (campo == "potencia") {
+      help.innerHTML = "<i class='fas fa-lightbulb'></i> Ingrese la pontencia del motor principal de la máquina en [ kW ]";
+    } else if (campo == "velocidad") {
+      help.innerHTML = "<i class='fas fa-lightbulb'></i> Ingrese las revoliciones por minuto [ RPM ] del eje a la salida del motor principal. <br> Si tiene una velocidad variable ingrese nominal del motor principal";
+    } else if (campo == "avatar") {
+      help.innerHTML = "<i class='fas fa-lightbulb'></i> Seleciona una de los icono o avatar disponibles que mas se ajuste a la descripcion de tu máquina ";
+    } else {
+    }
+  }
+  function hovera(){
+    help.innerHTML = "<i class='fas fa-lightbulb'></i> Seleciona una de los icono o avatar disponibles que mas se ajuste a la descripcion de tu máquina";
+    help.style.backgroundColor = "#d9d9d9";
+    avatar.style.backgroundColor = "#d9d9d9";
+  }
+  function leaveh() {
+    help.style.backgroundColor = "transparent";
+    help.innerHTML = "";
+    avatar.style.backgroundColor = "transparent";
+  }
+  function showa() {
+    if (avatars_cont.style.display === "block") {
+      avatars_cont.style.display = "none";
+    } else {
+      avatars_cont.style.display = "block";
+    }
+  }
+  // Vamos a intentar hacer los de los avatars
+  const a_machines = {{ m_avatars | tojson  }};
+  var avatar_f = document.getElementById("avatarf");
+  avatar_f.value = "maquina_def.png";
+  avatar_img = document.getElementById("avatar_img");
+  var nameS;
+  for (j = 0; j < a_machines.length; j++) {
+    nameS = String(a_machines[j].slice(0, -4));
+    var nameS = document.getElementById(nameS);
+    nameS.addEventListener("mouseover", function () {
+      this.style.backgroundColor = "#d9d9d9";
+      help.innerHTML = this.id + ".png"
+    });
+    nameS.addEventListener("mouseout", function () {
+      this.style.backgroundColor = "transparent";
+      help.innerHTML = "";
+    });
+    nameS.addEventListener("click", function () {
+      avatar_f.value = this.id + ".png";
+      avatar_img.src = "/static/images/avatars/machines/default/" + this.id + ".png";
+      avatars_cont.style.display = "none";
+    });
+  }
+  // Vamos a intentarlo con lo de las partes
+  const avatar_p = document.getElementById("avatarp");
+  avatar_p.value = "nada";
+  avatar_p.style.display = "none";
+  const a_part = {{ parts_ava | tojson }};
+  var named;
+  for (i = 0; i < a_part.length; i++ ){
+    named = "p_"+String(a_part[i]);
+    var named = document.getElementById(named);
+    named.addEventListener("mouseover", function() {
+    this.style.backgroundColor = "#d9d9d9";
+    });
+    named.addEventListener("mouseout", function() {
+      this.style.backgroundColor = "transparent";
+    });
+    named.addEventListener("click", function() {
+      img2add.src = "/static/images/avatars/parts/default/"+ this.id.slice(2) +".png";
+      avatar_p.value = this.id.slice(2) + ".png"
+    });
+  }
+</script>
+
+{% endblock %}

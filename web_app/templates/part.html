@@ -23,13 +23,13 @@
     <button class="accordion">Datos de Plantilla</button>
       <div class="panel">
         <div class="m_field">
-          <img src="{{ url_for('static', filename='images/avatars/parts/')}}{{partd['avatar']}} " style="float:left; width:254px; height: 254px">
+          <img src="{{ url_for('static', filename='images/avatars/parts/local/')}}{{partd['avatar']}} " style="float:left; width:254px; height: 254px">
           <table style="float:left; margin-left:10px;">
-            <tr><td style="width:180px;">Tipo: </td><td class="c_value" style="width:180px">{{ partd['type'] }}</td><td><b>---- ----</b></td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td style="width:180px;">Caracteristica</td><td style="width:180px">Valor</td><td>Unidades</td>
+                <td>Descripción del campo</td><td><i class="fas fa-circle-question"></i></td></tr>
             {% for key,value in s_fields.items() %}
-            <tr><td>{{ key }}</td><td  class="c_value">{{ value[0] }}</td><td><b>{{ value[1] }}</b></td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
+            <tr><td>{{ value[1] }}</td><td  class="c_value">{{ value[8] }}</td><td><b>{{ value[4] }}</b></td>
+                <td>{{ value[7] }}</i></td><td><i class="fas fa-circle-question"></i></td></tr>
             {% endfor%}
           </table>
         </div>

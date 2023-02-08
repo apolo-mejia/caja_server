@@ -10,9 +10,14 @@
   {% endblock %}
 </head>
 <body>
-  <div id="header_cont">
-    <div id="avatar" > <img src="{{ url_for('static', filename='images/avatar.png')}}" 
-      alt="Usuario" width="60" height="70">
+  {% if nav_menu['rol'] == 0 %}
+  <div id="header_cont" style="border-color: silver;" >
+    <div id="avatar" style="border-color: silver;">
+  {% else %}
+  <div id="header_cont" >
+    <div id="avatar" >
+  {% endif %}
+      <img src="{{ url_for('static', filename='images/avatar.png')}}" alt="Usuario" width="60" height="70">
     </div>
     <div id="user_data">
       <br>
@@ -47,10 +52,12 @@
             </span>
           </a>
         </li>
-        {% if nav_menu == 4 %}
-           <li class="scope_a">
+        {% if nav_menu['level'] == 4 and nav_menu['rol'] == 0  %} 
+          <li class="scope_a" style="background-color: silver;">
+        {% elif  nav_menu['level'] == 4 and nav_menu['rol'] == 1%}
+          <li class="scope_a">
         {% else %}
-           <li class="scope"> 
+          <li class="scope"> 
         {% endif %}        
           <a href="#">
             <b><i class="fa-solid fa-robot fa-2x"></i> PARTE <i class="fa-solid fa-arrow-right-from-bracket "></i></b>
@@ -86,7 +93,11 @@
     </div>
   </div>
   <div id="content">{% block content %} {% endblock %} </div>
+  {% if nav_menu['rol'] == 0%}
+  <div id="footer_cont" style="border-color: silver;">
+  {% else %}
   <div id="footer_cont">
+  {% endif %}
     {% block footer %}
       Desarollado 100% en <i class="fab fa-creative-commons"></i>
     {% endblock %}

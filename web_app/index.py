@@ -13,7 +13,7 @@ from queries import *
 from schedule import *
 #import time
 import json
-#import random
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['SECRET_KEY']='MySEcuRiTY71315404kEyI2'
@@ -365,7 +365,7 @@ def sensor():
 #        return render_template('net_conf.html')
     return render_template("sensor.html", form = form)
 
-@app.route('/<int:id_m>/machine')
+@app.route('/<int:id_m>/machine', methods=('GET','POST'))
 def machine(id_m):
     machined = get_machine(id_m)
     tasksd = get_machine_scope_task(id_m)
@@ -373,18 +373,105 @@ def machine(id_m):
     nav_menu = 3
     return render_template("machine.html", machined=machined, partsd=partsd, nav_menu=nav_menu, tasksd=tasksd)
 
-@app.route('/<int:id_p>/part')
-def part(id_p):
-    partd = get_part(id_p)
-    machined = get_machine(partd['id_machine'])
+@app.route('/<int:id_m>/machine_ec', methods = ('GET','POST'))
+def machine_ec(id_m):
+    if id_m == 99:
+        form = create_machine()
+        formp = create_part()
+        part_ord = 1
+        machined = get_machine(1)
+        parts_t = get_parts_templates()
+        tasksd = get_machine_scope_task(1)
+        parts_ava = []
+        for part in parts_t:
+            parts_ava.append(part['avatar'][:-4])
+        nav_menu = 3
+        path = '/home/pi/caja_server/web_app/static/images/avatars/machines/default'
+        m_avatars = get_files_by_ext(path,'.png')
+        if form.validate_on_submit():
+            machine_new = create_new_machine(request.form)
+            return redirect(url_for('machine_ec', id_m = machine_new['id']))
+        return render_template("machine_ec.html", machined=machined, nav_menu=nav_menu, tasksd=tasksd, form=form, 
+            parts_t=parts_t,parts_ava= parts_ava, m_avatars=m_avatars, formp=formp, part_ord=str(part_ord),parts=[])
+    else:
+        form = create_machine()
+        part_ord = 1
+        parts = get_machine_parts(id_m)
+        for part in parts:
+            part_ord = part_ord+1;
+        formp = create_part(ordinal=part_ord)
+        machined = get_machine(id_m)
+        tasksd = get_machine_scope_task(id_m)
+        parts_t = get_parts_templates()
+        parts_ava = []
+        for part in parts_t:
+            parts_ava.append(part['avatar'][:-4])
+        nav_menu = 3
+        print(parts_ava)
+        path = '/home/pi/caja_server/web_app/static/images/avatars/machines/default'
+        m_avatars = get_files_by_ext(path,'.png')
+        if formp.validate_on_submit():
+            consulta = create_new_part(request.form)
+            return redirect(url_for('machine_ec', id_m = id_m ))
+            #return render_template("test_page.html", result=request.form) !mala pratica
+        return render_template("machine_ec.html", machined=machined, nav_menu=nav_menu, tasksd=tasksd, form=form,
+            parts_t=parts_t, parts_ava= parts_ava, m_avatars=m_avatars, formp=formp, part_ord=str(part_ord),parts=parts)
+
+@app.route('/<int:id_pt>/create_part_template', methods = ('GET','POST'))
+def create_part_template(id_pt):
+    form = create_part_template_f()
+    form3 = create_s_field()
+    if id_pt == 1023:
+        form_mano = mano_list()
+        if form.validate_on_submit():
+            part_t = create_new_part_template(form.data)
+            return redirect(url_for('create_part_template', id_pt=part_t['id']))
+        return render_template('create_p_temp.html', form=form, form3=form3, form_mano=form_mano)
+    else:
+        form2 = upload_part_avatar()
+        part_t = get_part_temp_by_id(id_pt)
+        s_fields = json.loads(part_t['s_fields'])
+        if form2.validate_on_submit():
+            f = form2.avatar_up.data
+            filename = secure_filename(f.filename)
+            nombre = form2.avatar_name.data
+            name2save = app.root_path + "/static/images/avatars/parts/default/"+nombre+".png"
+            f.save(name2save)
+            return redirect(url_for('create_part_template', id_pt=part_t['id']))
+            # render_template("test_page.html",result=form2.data)
+        return render_template('edit_part_template.html', form=form, form2=form2, form3=form3, part_t=part_t,s_fields=s_fields)
+
+@app.route('/<int:id_p>/<int:rol>/part', methods = ['GET','POST'])
+def part(id_p,rol):
+    if rol == 1:
+        partd = get_part(id_p)
+        machined = get_machine(partd['id_machine'])
 # info tareas asociadas
-    drop = get_machine_task(partd['c_task'],machined['id'])
-    print (drop)
+        drop = get_machine_task(partd['c_task'],machined['id'])
+        print (drop)
 # info de plantilla
-    s_fields = json.loads(partd['s_fields'])
+        s_fields = json.loads(partd['s_fields'])
 # info menu de navegacion
-    nav_menu = 4
-    return render_template('part.html', machined=machined, partd=partd, s_fields=s_fields, nav_menu = nav_menu)
+        nav_menu = {'level' : 4, 'rol': rol}
+        return render_template('part.html', machined=machined, partd=partd, s_fields=s_fields, nav_menu = nav_menu)
+    else:
+        partd = get_part(id_p)
+        machined = get_machine(partd['id_machine'])
+        form = update_part_json()
+    # info tareas asociadas
+        drop = get_machine_task(partd['c_task'],machined['id'])
+        print (drop)
+    # info de plantilla
+        s_fields = json.loads(partd['s_fields'])
+    # info menu de navegacion
+        nav_menu = {'level' : 4, 'rol': rol}
+        if form.validate_on_submit():
+            pointer = ('parts',form.data['part_id'])
+            data = {'s_fields': "'"+form.data['json_pack']+"'","a_status":1}
+            consulta = update_table_register(pointer, data)
+            print(consulta)
+            return render_template("test_page.html",result=form.data)
+        return render_template('part_ec.html', machined=machined, partd=partd, s_fields=s_fields, nav_menu = nav_menu, form=form)
 
 @app.route('/<int:id_t>/task')
 def task(id_t):

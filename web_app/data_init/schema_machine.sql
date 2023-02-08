@@ -15,7 +15,7 @@ CREATE TABLE machines (
     i_serial TEXT,
 -- Nominal values 
     kw_nom REAL NOT NULL,
-    rpm_nom INTEGER NOT NULL,
+    rpm_nom REAL NOT NULL,
 -- Optinal nominal values
     i_nom INTEGER,
     v_nom INTEGER,
@@ -28,6 +28,7 @@ CREATE TABLE machines (
 --Description
     a_status INTEGER NOT NULL,
     picture TEXT,
-    avatar TEXT,
-    description TEXT
+    avatarf TEXT,
+    description TEXT,
+    journal TEXT
 );

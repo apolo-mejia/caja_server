@@ -6,6 +6,7 @@ CREATE TABLE parts (
 --Reference fields
     name TEXT NOT NULL NOT NULL,
     id_machine INTEGER NOT NULL,
+    ordinal INTEGER NOT NULL,
     id_maintenance INTEGER NOT NULL,
     type TEXT NOT NULL,
     users TEXT NOT NULL,
