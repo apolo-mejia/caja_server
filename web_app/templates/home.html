@@ -1,0 +1,121 @@
+{% extends "base2.html" %}
+{% block styles %}
+{{ super() }}
+.header{
+    float: left;
+    width: 99%;
+    min-width: 670px;
+    height: 30px;
+    background-color: {{hover_color}};
+    font: 13px Arial, sans-serif;
+    border-top: 1px solid {{border_color}};
+    border-left: 1px solid {{border_color}};
+    border-right: 1px solid {{border_color}};
+    border-radius: 5px 5px 0 0;
+//    padding: 2px; 
+}
+.maquinas{
+    float: left;
+    width: 99%;
+    min-width: 670px;
+    height: auto;
+    border-bottom: 1px solid {{border_color}};
+    border-left: 1px solid {{border_color}};
+    border-right: 1px solid {{border_color}};
+//  padding: 5px 0 0 5px;
+    margin: 0 2px 5px 0;
+    border-radius: 0 0 5px 5px;
+}
+.maquina{
+    float: left;
+    width: 210px;
+    min-width: 210px;
+    height: 200px;
+    border: 1px solid {{ border_color }};
+    border-radius: 3px;
+    margin: 2px;
+    font: 10px Arial, sans-serif;
+    padding: 1px;
+}
+.maquina:hover{
+    background-color: {{ sel_hover_color }};
+    cursor: pointer;
+}
+.parte{
+    float: left;
+    border: 1px solid blue;
+    border-radius: 3px;
+    margin: 1px;
+    padding: 1px;
+}
+.button {
+    display: inline-block;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #7aa8b7;
+    border-radius: 3px;
+    outline: none;
+    transition: 0.3s;
+  }
+.button:hover {
+    background-color: #c2c7c7;
+    cursor: pointer;
+  }
+//td{ border: 1px solid black}
+{% endblock %}
+{% block content %}
+<h3>Panel de DASHBOARD</h3>
+<div class="header">
+    Maquinas Locales
+    <a class="button" style="float:right; margin:2px;" href="{{ url_for('machine_ec2', id_m=99) }}">
+        <i class="fas fa-plus fa-1x"></i>
+        Agregar máquina
+    </a>
+</div>
+<div class="maquinas">
+
+    {% for maq in l_maq %}
+    <a href="{{ url_for('machine', id_m=maq['id'] )}}">
+    <div class="maquina" >
+    <table style="font: 10px Arial, sans-serif;"> 
+      <tr>
+        <td colspan="2" style="text-align:center">{{ maq['name'] }}</td>
+      </tr>
+      <tr>
+        <td style="width:40%; background-color: whitesmoke; border-radius: 3px;">
+          <img src="{{ url_for('static', filename='data/machine_') }}{{ maq['id'] }}/avatars/{{maq['avatarf']}}"
+            width="80px">
+        </td>
+        <td style="width: 58%;">
+          <div style="height: 124px; min-height: 38px; overflow: auto">
+          {% for part in  maq['parts'] %}
+            <div class="parte">
+              <img src="{{ url_for('static', filename='data/machine_') }}{{ maq['id'] }}/avatars/{{part['avatar'] }}"
+                width="46px" height="46px" alt="{{ part['name'] }}">   
+            </div>
+          {% endfor %}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" >
+          <textarea  cols="34" rows="3" wrap="off" disabled
+            style="font: 1em Arial, sans-serif; resize:none; overflow-y : hidden;">
+{{ maq['j_lines'][0] }}
+{{ maq['j_lines'][1] }}
+{{ maq['j_lines'][2] }}
+          </textarea>
+        </td>
+      </tr>
+    </table>
+    </div>
+    </a>
+    {% endfor%}
+
+</div>
+<diV class="header"> Mis maquinas </diV> 
+    <div class="maquinas"> nada nada 
+</div>
+{% endblock %}

@@ -1,62 +1,254 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
 {% block title %}Index{% endblock %}
 {% block head %}
   {{ super() }}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/task.css')}} ">
 {% endblock %}
+{% block styles %}
+  {{ super() }}
+#edit_mq{
+    float: left;
+    background-color: transparent;
+    padding: 3px 10px 3px 10px;
+    font: 14px Arial, sans-serif;
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-radius: 3px 3px 0 0;
+    margin: 0 3px 0 3px;
+    cursor: pointer;
+}
+#view_mq{
+    float: left;
+    background-color: {{ sel_hover_color }};
+    padding: 3px 10px 3px 10px;
+    font: 14px Arial, sans-serif;
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-radius: 3px 3px 0 0;
+    cursor: pointer;
+}
+#ec_mq{
+    float: left;
+    background-color: transparent;
+    padding: 3px 10px 3px 10px;
+    font: 14px Arial, sans-serif;
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-radius: 3px 3px 0 0;
+    cursor: pointer;
+}
+#edit_tab{
+  float: left;
+  width: 100%;
+  background-color: {{ sel_hover_color }};
+  display: none;
+  font: 11px Courier New;
+}
+#view_tab{
+  float: left;
+  width: 100%;
+  background-color: {{ sel_hover_color }};
+  font: 11px Courier New;
+}
+#ec_tab{
+  float: left;
+  width: 100%;
+  height: 200px;
+  background-color: {{ sel_hover_color }};
+  display:none;
+}
+#validar{
+  cursor: pointer;
+}
+#week_scheduler{
+  font: 11px Courier New;
+  display: grid;
+  grid-template-columns: repeat( 29, auto);
+  grid-gap: 1px;
+  background-color: #e6ebff;
+  padding: 5px;
+  border: 1px solid blue;
+  border-radius: 4px;
+  min-width: 660px;
+  margin: 0px;
+}
+#pre_tt {
+  font: 11px Courier New;
+  display: grid;
+  grid-template-columns: repeat( 29, auto);
+  grid-gap: 1px;
+  background-color: #e6ebff;
+  padding: 5px;
+  border: 1px solid blue;
+  border-radius: 4px;
+  min-width: 660px;
+  margin: 0px;
+}
+.week_container{
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 2px;
+}
+.week_container_day{
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 2px;
+  grid-column : span 4;
+}
+{% endblock %}
+
 {% block content %}
-  <h3 style="width:100%; margin: 0 auto;"><a href="{{ url_for('machine', id_m=taskd['id_machine']) }}"> {{ machined['name'] }} </a>/global task/{{ taskd['name']}}</h3>
-  <div id="components_cont">
-    <div id="t_avatar">
-      <img src="{{ url_for('static', filename='images/avatars/tasks/')}}{{taskd['avatar']}}" style="width:64px; heigth:64px;">
-    </div>
-    <div id="description">
-      {{ taskd['description'] }}
-    </div>
+<h3 style="width:100%; margin: 0 auto;"><a href="{{ url_for('machine', id_m=taskd['id_machine']) }}"> {{ machined['name'] }} </a>/global task/{{ taskd['name']}}</h3>
+<div id="components_cont">
+  <div id="t_avatar">
+    <img src="{{ url_for('static', filename='images/avatars/tasks/')}}{{taskd['avatar']}}" 
+    style="width:64px; height:64px;">
   </div>
+  <div id="description">
+    {{ taskd['description'] }}
+  </div>
+</div>
   fecha de Inicio: {{ taskd['d_start'] }} -- fecha final: {{ taskd['d_end'] }}<br>
 {#  {{ w_block[0][0]}} -- {{ w_block[-1]['n_rows'] }} -- {{ w_block[-1]['r_allow'] }} -- {{ w_block[-1]['win'] }} -- {{ w_block[-1]['a_win']  }}
   -- {{ w_block[-1]['n_meas'] }} #}
-  <div id="contend">
-    <button class="accordion">Progamación de tomas</button>
-      <div class="panel">
-        <div class="m_field">
-          <table>
-            <tr><td>Programación</td><td>del</td><td> {{ w_block[-1]['s_week']}} </td>
-                <td></td><td  style="text-align:center;"> al </td><td></td><td>{{ w_block[-1]['e_week'] }}</td>
-                <td style="text-align:center;"> Semana:</td><td>{{ w_block[-1]['week'] }}</td>
-            </tr>
-            <tr><td>Hora de Encendido: </td><td></td><td class="editable">{{ taskd['hf_start'] }}</td><td></td>
-                <td>Hora de Apagado:</td> <td></td><td  class=" editable">{{ taskd['hf_end'] }}</td><td>Intervalo tomas:</td>
-                <td class="editable"> {{ w_block[-1]['h_interval'] }}</td><td>Horas</td>
-                <td class="editable"">{{ w_block[-1]['m_interval'] }}</td><td></td><td> Minutos</td>
-            </tr>
-          </table> 
-        </div>
-        <div id="week_scheduler">
-          {# First Row #}
-            {% for i in range (8) %}
-              {% if i == 0 %}
-                <div class="week_container">{{ w_block[0][i]}}</div>
-              {% else %}
-                <div class="week_container_day">{{ w_block[0][i] }}</div>
-              {% endif %}
-            {% endfor %}
-          {# Others Rows #}
-          {% for j in range (1,w_block[-1]['n_rows']) %}
-            {% for i in range (29) %}
-              <div class="week_container" 
-                {% if w_block[j][i] == 0 %}
-                  style="background-color: #e6ebff">
-                {% else %}
-                 >
-                {% endif %}
-              {{ w_block[j][i] }}</div>
-            {% endfor %}
-          {% endfor %}
-        </div>
+<div id="contend">
+<button class="accordion">Progamación de tomas</button>
+  <div class="panel">
+  
+    <div style="float:left; width: 100%;">
+      <div id="view_mq">Revisar</div>
+      <div id="edit_mq">Editar</div>
+      <div id="ec_mq">Exportar / crear</div>
+    </div>
+
+    <div id="view_tab">
+      <table>
+        <tr>
+          <td>Programación</td><td>del</td><td> {{ w_block[-1]['s_week']}} </td>
+          <td></td>
+          <td  style="text-align:center;"> al </td><td></td><td>{{ w_block[-1]['e_week'] }}</td>
+          <td style="text-align:center;"> Semana:</td><td>{{ w_block[-1]['week'] }}</td>
+        </tr>
+        <tr>
+          <td>Hora de Encendido: </td>
+          <td></td>
+          <td class="editable">{{ taskd['hf_start'] }}</td>
+          <td></td>
+          <td>Hora de Apagado:</td> 
+          <td></td>
+          <td  class=" editable">{{ taskd['hf_end'] }}</td>
+          <td>Intervalo tomas:</td>
+          <td class="editable"> {{ w_block[-1]['h_interval'] }}</td>
+          <td>Horas</td>
+          <td class="editable">{{ w_block[-1]['m_interval'] }}</td>
+          <td></td>
+          <td> Minutos</td>
+        </tr>
+      </table> 
+      <div id="week_scheduler">
+      {# First Row #}
+      {% for i in range (8) %}
+        {% if i == 0 %}
+          <div class="week_container">{{ w_block[0][i]}}</div>
+        {% else %}
+          <div class="week_container_day">{{ w_block[0][i] }}</div>
+        {% endif %}
+      {% endfor %}
+      {# Others Rows #}
+      {% for j in range (1,w_block[-1]['n_rows']) %}
+        {% for i in range (29) %}
+          {% if w_block[j][i] == 0 %}
+          <div class="week_container" style="background-color: #e6ebff;">
+          {% else %}
+          <div class="week_container">
+          {% endif %}
+        {{ w_block[j][i] }}
       </div>
-    <button class="accordion">Alarmas</button>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+    <div id="edit_tab">
+      <table>
+        <form method="POST" novalidate>
+          {{ form_tk.hidden_tag() }}
+        <tr>
+          <td colspan="2" style="width: 150px;">DIAS HABILITADOS</td>
+          <td colspan="4">HORAS HABILITADAS</td>
+          <td>INTERVALO DE TOMAS</td>        
+          <td>ENVIAR</td>
+        </tr>
+        <tr>
+          <td style="width: 15px;">{{ form_tk.monday }}</td>
+          <td> {{ form_tk.monday.label }} </td>
+          <td colspan="4"> Hora de inicio</td>
+          <td> 
+            {{ form_tk.t_int_h(style="font: 11px Courier New;") }} {{ form_tk.t_int_h.label }}
+            {{ form_tk.t_int_m(style="font: 11px Courier New;") }} {{ form_tk.t_int_m.label }}
+          </td>
+          <td>{{ form_tk.submitint(style="font: 11px Courier New;") }}</td>
+        </tr>
+        <tr>
+          <td>{{ form_tk.tuesday }}</td>
+          <td>{{ form_tk.tuesday.label }}</td>
+          <td>{{ form_tk.hf_start_h( style="font: 11px Courier New;") }}</td>
+          <td>{{ form_tk.hf_start_h.label}}</td>
+          <td>{{ form_tk.hf_start_m( style="font: 11px Courier New;") }}</td>
+          <td>{{ form_tk.hf_start_m.label}}</td>
+          <td></td>
+          <td id="validar" > Validar/Generar </td>
+        </tr>
+        <tr>
+          <td>{{ form_tk.wednesday }}</td>
+          <td>{{ form_tk.wednesday.label}}</td>
+          <td colspan="4">Hora de final</td>
+          <td></td>
+          <td id="dias"> {{ form_tk.d_allow.label }}{{ form_tk.d_allow() }} </td>
+        </tr>
+        <tr>
+          <td>{{ form_tk.thursday }}</td>
+          <td>{{ form_tk.thursday.label }}</td>
+          <td>{{ form_tk.hf_end_h(style="font: 11px Courier New;") }}</td>
+          <td>{{ form_tk.hf_end_h.label }}</td>
+          <td>{{ form_tk.hf_end_m(style="font: 11px Courier New;") }}</td>
+          <td>{{ form_tk.hf_end_m.label }}</td>
+          <td></td>
+          <td id="fuera"> {# csrf_token() #} </td>
+        </tr>
+        <tr>
+          <td>{{ form_tk.friday }}</td>
+          <td>{{ form_tk.friday.label }}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>{{ form_tk.saturday }}</td>
+          <td>{{ form_tk.saturday.label }}</td>
+        </tr>
+        <tr>
+          <td>{{ form_tk.sunday }}</td>
+          <td>{{ form_tk.sunday.label }}</td>
+        </tr>
+        </form>
+      </table>
+      <div id="pre_tt" style="border: 1px solid green;">
+        Esta es la tabla que se mostraría a través de el Ajax.
+
+      </div>
+    </div>
+    <div id="ec_tab">
+      <label>Name</label>
+      <input type="text" id="name"><br/>
+      <button onclick="submit_entry();">Envias</button>
+      
+    </div>
+  </div>
+  <button class="accordion">Alarmas</button>
       <div class="panel">
         <div class="m_field">
           <table>
@@ -112,46 +304,16 @@
       <div class="panel">
         <div class="m_field">
           <table>
-            <tr><td style="width:200px;">Potencia de placa: </td>
-                 <td class="editable" style="width:200px;"> {{ s_fields['Rated-Power'][0] }} > Power > {{ s_fields['Rated-Power'][1] }}</td>
-                 <td>kW</td><td></td></tr>
-            <tr><td>Base: </td><td class="editable">{{ s_fields['base'] }}</td>
-                <td></td><td></td></tr>
-            <tr><td>Tipo de Máquina: </td><td  class="editable">{{ s_fields['type'] }}</td>
-                <td></td><td></td></tr>
-            <tr><td>Grupo </td><td  class="output"">{{ s_fields['Group'][0] }} -- {{ s_fields['Group'][1] }}</td>
-                <td></td><td></td></tr>
+            {% for key, value in s_fields.items() %}
+            <tr>
+              <td style="width:200px;" class="editable" style="width:200px;"> {{ key }} </td><td>{{ value }}</td>
+              
+            </tr>
+            {% endfor %}
           </table>
         </div>
       </div>
-    <button class="accordion">Descripción / Journal</button>
-      <div class="panel">
-        <div class="m_field">
-          <table>
-            <tr><td style="width:200px;min-width:200px;">Descripción: </td><td class="d_value" style="width:82%;min-width:280px;">{{ taskd['help'] }}</td>
-                 <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-          </table>
-          Journal
-          <div class="journal">
-            La últimos movimivientos de las cosas <br>
-            Primera linea<br>
-            Segunda linea<br>
-            Tercera linea<br>
-            Cuarta Linea<br>
-            Quita Linea<br>
-            Sexta Linea<br>
-            Séptima Linea<br>
-            Octava Linea<br>
-            Novena Linea<br>
-            Décima Linea<br>
-          </div>
-        </div>        
-          <div id="visual_des">
-            <a href="#">Ver todo</a>
-            <a href="#">+Ingresar evento</a> 
-          </div>
-      </div>   
-  </div>
+</div>
 
 <script>
 var acc = document.getElementsByClassName("accordion");
@@ -168,6 +330,197 @@ for (i = 0; i < acc.length; i++) {
     }
   });
 }
+var dias_int = 0;
+
+view_mq.addEventListener("mouseover", function(){
+  this.style.backgroundColor = "{{ sel_hover_color }}";
+});
+view_mq.addEventListener("mouseout", function() {
+  if (view_tab.style.display === "block") {
+    this.style.backgroundColor = "{{ sel_hover_color }}"; 
+  } else {
+    this.style.backgroundColor = "transparent";  
+  }
+});
+view_mq.addEventListener("click", function() {
+  view_tab.style.display = "block";
+  edit_tab.style.display = "none";
+  ec_tab.style.display = "none";
+  edit_mq.style.backgroundColor = "transparent";
+  ec_mq.style.backgroundColor = "transparent"
+  this.style.backgroundColor = "{{sel_hover_color }}";
+});
+
+edit_mq.addEventListener("mouseover", function(){
+  this.style.backgroundColor = "{{ sel_hover_color}}";
+});
+edit_mq.addEventListener("mouseout", function() {
+  if (edit_tab.style.display === "block") {
+    this.style.backgroundColor = "{{ sel_hover_color }}"; 
+  } else {
+    this.style.backgroundColor = "transparent";  
+  }
+});
+edit_mq.addEventListener("click", function() {
+  view_tab.style.display = "none";
+  edit_tab.style.display = "block";
+  ec_tab.style.display = "none";
+  view_mq.style.backgroundColor = "transparent";
+  ec_mq.style.backgroundColor = "transparent";
+  this.style.backgroundColor = "{{sel_hover_color }}";
+});
+
+ec_mq.addEventListener("mouseover", function(){
+  if (ec_tab.style.display === "block") {
+    this.style.backgroundColor = "{{ sel_hover_color }}"; 
+  } else {
+    this.style.backgroundColor = "transparent";  
+  }
+});
+
+ec_mq.addEventListener("click", function() {
+  view_tab.style.display = "none";
+  edit_tab.style.display = "none";
+  ec_tab.style.display = "block";
+  edit_mq.style.backgroundColor = "transparent";
+  view_mq.style.backgroundColor = "transparent";
+  this.style.backgroundColor = "{{sel_hover_color }}";
+});
+s_d_allow = "{{ taskd['d_allow'] | tojson }}"
+//var foo = s_d_allow & 64;
+if ((s_d_allow & 64 ) == 64) { monday.checked = true; }
+if ((s_d_allow & 32) == 32) { tuesday.checked = true; }
+if ((s_d_allow & 16) == 16) { wednesday.checked = true; }
+if ((s_d_allow & 8) == 8) { thursday.checked = true; }
+if ((s_d_allow & 4) == 4) { friday.checked = true; }
+if ((s_d_allow & 2) == 2) { saturday.checked = true; }
+if ((s_d_allow & 1) == 1) { sunday.checked = true; }
+//fuera.innerHTML = foo;
+token = document.getElementById("csrf_token").value;const SCRIPT_ROOT = '{{ request.script_root|tojson }}';
+var rut = 'http://10.0.0.1/web';
+var ruta = '{{ url_for("check_time_table") }}';
+const rutac = rut + ruta;
+validar.addEventListener("click", function() {
+  dias_int = 0;
+  if (monday.checked == true) { dias_int = dias_int | 64; }
+  if (tuesday.checked == true) { dias_int = dias_int | 32; }
+  if (wednesday.checked == true) { dias_int = dias_int | 16; }
+  if (thursday.checked == true) { dias_int = dias_int | 8; }
+  if (friday.checked == true) { dias_int = dias_int | 4; }
+  if (saturday.checked == true) { dias_int = dias_int | 2; }
+  if (sunday.checked == true) { dias_int = dias_int | 1;  }
+  d_allow.value = dias_int;
+
+  var entry = {
+    hf_start_h : hf_start_h.value, hf_start_m : hf_start_m.value,
+    hf_end_h : hf_end_h.value, hf_end_m : hf_end_m.value,
+    t_int_h : t_int_h.value, t_int_m : t_int_m.value,
+    d_allow : d_allow.value,
+    id_t : "{{ taskd['id'] }}"
+  };
+  //console.log(entry);
+  fetch(`${ruta}`, {
+  method: "POST",
+  credentials: "include",
+  body: JSON.stringify(entry),
+  cache: "no-cache",
+  headers: {
+    "contend-type": "application/json",
+    "X-CSRF-TOKEN": token
+  }
+  }).then(function (response) {
+  if (response.status !== 200) {
+    console.log(`Response status was not 200: ${response.status}`);
+    return ;
+  }
+  response.json().then( function (data) {
+    console.log(data);
+    text = '';
+    for (let index = 0; index < data[0].length; index++) {
+      if (index === 0){
+        text += '<div class="week_container">'+data[0][index]+'</div>';
+      }else{
+        text += '<div class="week_container_day">'+data[0][index]+'</div>';
+      }
+    }
+    let size = data.length-1;
+    for (let index = 1; index < data[size]['n_rows']; index++) {
+      for (let index2 = 0; index2 < 29; index2++) { 
+        if (data[index][index2] == 0) {
+          text += '<div class="week_container" style="background-color: #e6ebff;">';
+        } else {
+          text += '<div class="week_container">';
+        }
+        text += data[index][index2] + '</div>';
+      }
+    }
+    pre_tt.innerHTML = text;
+  })
+  
+  //'{% for i in range (8) %}
+  //   {% if i == 0 %}
+  //     <div class="week_container">{{ w_block[0][i]}}</div>
+  //   {% else %}
+  //     <div class="week_container_day">{{ w_block[0][i] }}</div>
+  //   {% endif %}
+  // {% endfor %}
+  // {# Others Rows #}
+  // {% for j in range (1,w_block[-1]["n_rows"]) %}
+  //   {% for i in range (29) %}
+  //     {% if w_block[j][i] == 0 %}
+  //       <div class="week_container" style="background-color: #e6ebff;">
+  //     {% else %}
+  //       <div class="week_container">
+  //     {% endif %}
+  //       {{ w_block[j][i] }}</div>
+  //     {% endfor %}
+  //   {% endfor %}
+  // </div>';    
+
+})
+});
+
+
+function submit_entry() {
+  
+  let data = {
+    "csrf_token" : token ,
+    "name": "Flask Room",
+    "description": "Talk about Flask here.",
+  }
+//  let data = new FormData()
+//  data.append("name", "Flask Room")
+//  data.append("description", "Talk about Flask here.")
+  console.log(data)
+  //var rute = 'http://10.0.0.21:5000/';
+  //fetch(`${window.origin}/check_time_table`, {
+  fetch(`${ruta}`, {
+  method: "POST",
+  credentials: "include",
+  body: JSON.stringify(data),
+  cache: "no-cache",
+  headers: {
+    "contend-type": "application/json",
+    "X-CSRF-TOKEN": token
+  }
+}).then(function (response) {
+  if (response.status !== 200) {
+    console.log(`Response status was not 200: ${response.status}`);
+    return ;
+  }
+  response.json().then( function (data) {
+    console.log(data);  
+  })
+})
+
+}
+var w_block = {{ w_block|tojson }};
+pre_tt.innerHTML = '{% for i in range (8) %}{% if i == 0 %}<div class="week_container">{{ w_block[0][i]}}</div>{% else %}<div class="week_container_day">{{ w_block[0][i] }}</div>{% endif %}{% endfor %}{# Others Rows #}{% for j in range (1,w_block[-1]["n_rows"]) %}{% for i in range (29) %}{% if w_block[j][i] == 0 %}<div class="week_container" style="background-color: #e6ebff;">{% else %}<div class="week_container">{% endif %}{{ w_block[j][i] }}</div>{% endfor %}{% endfor %}</div>';
+
+// console.log(`${SCRIPT_ROOT}`)
+// fuera.innerHTML = rutac;
+
+
 </script>
 
 {% endblock %}

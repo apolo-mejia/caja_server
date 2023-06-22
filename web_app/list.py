@@ -1,7 +1,7 @@
 class listas:
     def __init__(self):
         # self.key_list = key_list
-        self.dato = {'key_list':'mano_soporte', 'name':'Marcas de soportes','data':[('fag','FAG'),('ina','INA'),('skf','SKF'),
+        self.dato = {'key_list':'mano_soporte', 'name':'Marcas de soportes','data':[('def','Llevar lista'),('fag','FAG'),('ina','INA'),('skf','SKF'),
         ('snr','SNR'),('ntn','NTN'),('koy','KOYO'),('nsk','NSK'),('smt','SEALMASTER'),('lbt','LINK BELT'),('oth','Other..')]}
         
     def datalist(self):

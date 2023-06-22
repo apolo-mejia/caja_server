@@ -4,11 +4,13 @@ CREATE TABLE tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 --Reference fields
-    name TEXT NOT NULL NOT NULL,
+    name TEXT NOT NULL,
+    id_sensor INTEGER NOT NULL,
     id_machine INTEGER,
     id_part INTEGER NOT NULL,
     id_maintenance INTEGER NOT NULL,
     id_template INTEGER NOT NULL,
+    site TEXT NOT NULL,
     c_task INTEGER NOT NULL,
 --Measure values
     c_measure REAL,

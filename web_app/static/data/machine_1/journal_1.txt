@@ -1,0 +1,17 @@
+2023-05-23 17:29:01.219737-> Maquina con nombre: Maquina ha si creada. Asocida de al proceso 0.
+2023-05-23 17:29:01.219784-> Potencia: 3.0 kW. Velocidad de Giro:1.0 RPM. Avatar: motor_fi.png.
+2023-05-23 17:29:39.371442-> Se ha agregado parte : Motor_AC1.
+2023-05-23 17:30:46.207498-> Se ha agregado parte : Brida.
+2023-05-23 17:31:03.144022-> Se ha agregado parte : Chumacera.
+2023-05-23 17:31:52.116436-> Se ha agregado el sensor : Marcial001 a parte Motor_AC1.
+2023-06-02 09:21:33.975753->Este es un mensaje para ser agragadp a el Journal de la máquina
+2023-06-02 09:23:07.962031->Primar las cosas que se vienen dando en ta line dere terminar en -
+2023-06-02 09:24:24.453575->por que no sale el último caracter
+2023-06-02 09:25:39.283090->Poder revizar esto mas facil.-
+2023-06-02 09:31:36.773453-> Esperamos que este mensaje si quede bueno de por dios -.-
+2023-06-02 09:38:35.213600-> Se han cambiado los valores de la maquina-
+2023-06-02 09:39:53.145322-> Se han cambiado los valores de la maquina.-
+2023-06-02 09:40:51.465872-> Se han cambiado los valores de la maquina.-
+2023-06-05 08:24:41.088397-> Se a agregado / cambiado la foto de la maquina.-
+2023-06-05 16:37:56.486070-> Se a agregado / cambiado la foto de la maquina.-
+2023-06-05 16:40:12.227519-> Se a agregado / cambiado la foto de la maquina.-

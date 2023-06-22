@@ -15,16 +15,17 @@ CREATE TABLE machines (
     i_serial TEXT,
 -- Nominal values 
     kw_nom REAL NOT NULL,
-    rpm_nom REAL NOT NULL,
+    rpm_nom REAL,
 -- Optinal nominal values
-    i_nom INTEGER,
-    v_nom INTEGER,
+    i_nom REAL,
+    v_nom REAL,
     n_phases INTEGER,
     n_poles INTEGER,
     f_nom INTEGER,
-    nema_class INTEGER,
-    ip_class INTEGER,
-    housing INTEGER,
+--Mecanical / others
+    nema_class TEXT,
+    ip_grade TEXT,
+    housing TEXT,
 --Description
     a_status INTEGER NOT NULL,
     picture TEXT,

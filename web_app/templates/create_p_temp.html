@@ -112,7 +112,8 @@
       <tr><td>{{form3.s_name.label}}</td><td>{{form3.s_name(style="font: 11px Courier New;", size=13)}}</td><td>-</td><td>-</td></tr>
       <tr><td>{{form3.s_description.label}}</td><td colspan="3">{{form3.s_description(style="font: 11px Courier New;", size=35)}}</td></tr>
       <tr><td>{{form3.s_dim.label}}</td><td>{{form3.s_dim(style="font: 11px Courier New;")}}</td>
-          <td colspan="2">{{form3.s_units(style="font: 11px Courier New;")}}</td>
+          <td colspan="2" id="ad_td">{{form3.s_units(style="font: 11px Courier New;", size=12)}}</td>
+          <td colspan="2" id="units_td" style="display:none;">{{form3.s_units2(style="font: 11px Courier New;")}}</td>
       </tr>
       <tr><td>{{form3.s_type.label}}</td><td>{{form3.s_type(style="font: 11px Courier New;")}}</td>
           <td></td>
@@ -202,7 +203,10 @@
   const s_dim = document.getElementById("s_dim");
   const s_type = document.getElementById("s_type");
   //const s_list_td = document.getElementById("s_list_td");
+  const ad_td = document.getElementById("ad_td");
+  const units_td = document.getElementById("units_td");
   const s_units = document.getElementById("s_units");
+  const s_units2 = document.getElementById("s_units2");
   const s_value_def = document.getElementById("s_value_def");
   const s_important = document.getElementById("s_important");
   const s_description = document.getElementById("s_description");
@@ -234,7 +238,7 @@
     // Como entran las varibles por default
   var estado = 0;
   var field_pack={};
-    
+  
   help_box.innerHTML= "Comienza ingresansando algunos los datos básicos para indexar la maquina: Nombre, tipo, usuario y las 'Key Words' con que se pueda etiquetar la parte." ;
   reference_t.style.display="none";
   description_t.style.display="none";
@@ -350,7 +354,10 @@
       s_value_def.value= "";
       s_type.value = "int";
       s_dim.value = "ad";
-      s_units.value = "none";
+      s_units.value = "";
+      ad_td.style.display = "";
+      s_units2.value = "none";
+      units_td.style.display = "none";
       s_important.checked = false;
       fuera.innerHTML = JSON.stringify(field_pack);
       s_fields.value= JSON.stringify(field_pack);
@@ -386,5 +393,19 @@
   })
   rodamientos.addEventListener("change", function(){
     brand.value = this.value;
+  })
+  s_dim.addEventListener("change", function(){
+    if (this.value != 'ad'){
+      ad_td.style.display = "none";
+      units_td.style.display = "";
+    }else{
+      ad_td.style.display = "";
+      units_td.style.display = "none";
+      s_units.value = "";
+    }
+  })
+  s_units2.addEventListener("change", function(){
+    this.style.backgroundColor = "yellow";
+    s_units.value = this.value;
   })
   </script>

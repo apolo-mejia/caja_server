@@ -1,0 +1,370 @@
+{% extends "base2.html" %}
+{% block styles %}
+{{ super() }}
+#content{
+    float: left;
+    width: 100%;
+    height:auto;
+    min-height: 200px; 
+    // border-radius: 8px;
+    min-width: 670px;
+    // margin: 5px 0 5px 0;
+    // border: 1px solid {{ border_color }};
+}
+#progress{
+    float: left;
+    width: 100%;
+    height: 30px;
+    min-height: 30px;
+    border-radius: 0px;
+    min-width: 670px;
+    margin: 5px 0 5px 0;
+    // border: 1px solid {{ border_color }};
+}
+.step{
+    display: flex;
+    align-items: center;
+    float: left;
+    width: 18%;
+    height:100%;
+    font: 11px Arial, sans-serif;
+    background-color: #ff9933;
+}
+.step_d{
+    display: flex;
+    align-items: center;
+    float: left;
+    width: 18%;
+    height:100%;
+    font: 11px Arial, sans-serif;
+    background-color: #fff2e6;
+}
+.step_a{
+    display: flex;
+    align-items: center;
+    float: left;
+    width: 18%;
+    height:100%;
+    font: 11px Arial, sans-serif;
+    background-image: linear-gradient(to right, #ff9933, #fff2e6)
+}
+#completed{
+    display: flex;
+    align-items: center;
+    justify-content: center ;
+    float: left;
+    width: 10%;
+    height:100%;
+    font: 11px Arial, sans-serif;
+}
+.step_container{
+    float: left;
+    width: 100%;
+    height: auto;
+    //100px;
+    // min-height: 100px;
+    // border-radius: 8px;
+    min-width: 670px;
+    margin: 1px 0 0 0;
+    font: 10px Arial, sans-serif;
+    background-color: #fff2e6;
+    //border: 1px solid {{ border_color }}; 
+}
+#mq_datatxt{
+    float: left;
+    width: 20%;
+    min-width: 200px;
+    height: 100px;
+    background-color: #fff2e6;
+}
+#mq_avatar{
+    float: left;
+    width: 120px;
+    height: 100px;
+    //background-image: linear-gradient(to right, #ff9933, #fff2e6);
+    background-color: #fff2e6;
+    display : block;
+}
+#mq_foto{
+    float: left;
+    width: 120px;
+    height: 100px;
+    //background-image: linear-gradient(to right, #ff9933, #fff2e6);
+    background-color: #fff2e6;
+    display : block;
+}
+#mq_help_box{
+    float: left;
+    display: block;
+    width: 32%;
+    //min-width: 290px;
+    height: 100px;
+    background-color: #fff2e6;
+}
+#mq_help_box2{
+    float: left;
+    display: block;
+    width: 34%;
+    max-width: 290px;
+    height: 100px;
+    background-color: #fff2e6;
+}
+.partadded{
+    float:left;
+    //position:relative;
+    width:110px;
+    height: 155px;
+    min-height: 155px;
+    border: 1px solid brown;
+    //border-radius: 4px;
+    margin: 0 5px 0px 0px;
+    display: block;
+    background-color: transparent;
+}
+tr{
+    height: 15px;
+}
+{% endblock %}
+{% block content %}
+<div id="progress">
+    <div class="step">Crear Máquina</div>
+    <div class="step">Agregar Partes</div>
+    <div class="step">Vincular Sensores</div>
+    <div class="step_a">Asociar Tareas</div>
+    <div class="step_d">Configurar Dashboard</div>
+    <div id="completed">{{ insumos['completed'] }} % <br />completo</div>
+</div>
+<div class="step_container">
+    <div id="mq_datatxt">
+        <table>
+            <tr>
+                <td>Nombre máquina</td><td><input type="text" disabled size=11 value="{{ machine['name'] }}" ></td>
+            </tr>
+            <tr>
+                <td>Marca</td><td><input type="text" disabled size=11 value="{{ machine['brand'] }}"></td>
+            </tr>
+            <tr>
+                <td>Modelo</td><td><input type="text" disabled size=11 value="{{ machine['model']}}"></td>
+            </tr>
+        </table>
+    </div>
+    <div id="mq_avatar">
+        <img src="{{ url_for('static', filename=insumos['path']) }}/avatars/{{machine['avatarf']}}"
+             id="mq_avatar_img" style="width:100px; height:100px; padding: 0 10px 0 10px;">
+    </div>
+    <div id="mq_foto">
+        <img src="{{ url_for('static', filename='images/pictures/machines/default/no_picture.png') }}" id="mq_foto_img"
+        style="width:100px; height:100px; margin:0 10px 0 10px;">
+        
+    </div>
+    <div id="mq_help_box2">
+        <table>
+            <tr>
+                <td>Potencia Nominal</td><td><input type="text" disabled size=5 value="{{machine['kw_nom']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>    
+                <td>Frecuencia Nominal</td><td><input type="text" disabled size=5 value="{{machine['f_nom']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+            </tr>
+            <tr>
+                <td>Voltaje Nominal</td><td><input type="text" disabled size=5 value="{{machine['v_nom']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+                <td>Número de fases</td><td><input type="text" disabled size=5 value="{{machine['n_phases']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+            </tr>
+            <tr>
+                <td>Corriente Nominal</td><td><input type="text" disabled size=5 value="{{machine['i_nom']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+                <td>Grado Ip</td><td><input type="text" disabled size=5 value="{{machine['ip_grade']}}" 
+                    style="text-align:right; font: 10px Arial, sans-serif;"></td>
+            </tr>
+        </table>
+    </div>
+    <div id="mq_help_box">
+        <table>
+            <tr>
+                <td>Proceso Asociado</td>
+                <td><input type="text" disabled size=11 value="{{machine['id_process']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>    
+                <td>Serial de Fábrica</td>
+                <td><input type="text" disabled size=11 value="{{machine['m_serial']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+            </tr>
+            <tr>
+                <td>Plan Mantenimiento</td>
+                <td><input type="text" disabled size=11 value="{{machine['id_maintenance']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+                <td>Serial Interno</td>
+                <td><input type="text" disabled size=11 value="{{machine['i_serial']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+            </tr>
+            <tr>
+                <td>Usuarios</td>
+                <td><input type="text" disabled size=11 value="{{machine['users']}}" style="font: 10px Arial, sans-serif;"></td>
+                <td>Descripción</td>
+                <td><textarea disabled size=5 value="{{machine['description']}}" 
+                    style="text-align:right; font: 10px Arial, sans-serif;"></textarea></td></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="step_container">
+    {% for part in parts %}
+    <div class="partadded">
+        <div style="text-align:center; font: 10px Arial, sans-serif;">{{ part['name']}}</div>
+        <img src="{{ url_for('static', filename='data/machine_') }}{{machine['id']}}/avatars/{{part['avatar']}}" 
+        style="width:84px; height:84px;margin: 0 12px 0 12px;">
+        <div style="width: 95%; height: 55px; margin: 0 2px 4px 2px; background-color: white; border: 1px dashed black;">
+        <table>
+        {% for sensor in sensors %}
+        {% if (sensor['part_id'] == part['id']) %}
+        <tr>
+            <td><img src="{{ url_for('static', filename='images/avatars/sensors/') }}{{sensor['avatar'] }}" width="20px"></td>
+            <td>{{ sensor['alias'] }}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        </table>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="step_container">
+    <h2>Asociar Tareas</h2>
+    <div>
+    <input type="submit" value="Matricular" id="matricula">
+    </div>
+    <table style="border: 1px solid brown; text-align: center; background-color: white;float: left;">
+    {% for row in table %}
+    {% if row['tipo'] == 'h1'%}
+    <tr>
+        <td colspan="2" style="border-right: 1px solid blue;">{{ row['title'] }}</td>
+        {% for col in row['cols'] %}
+        <td style="border-right: 1px solid blue;" colspan="{{ col['colspan'] -1 }}">
+            <img src="{{url_for('static', filename='data/machine_') }}{{machine['id']}}/avatars/{{col['avatar']}}"
+            style="width:80px; height:80px;margin: 0 12px 0 12px;"><br>
+            {{ col['text'] }}<br>
+            {{ col['part_id']}}
+        </td>
+        {% endfor %}
+    </tr>
+    {% elif row['tipo'] == 'h2' %}
+    <tr>
+        <td style="background-color: lightskyblue;">{{ row['title'] }}</td>
+        <td style="background-color: lightseagreen;border-right: 1px solid blue;">{{ row['title2'] }}</td>
+        {% for col in row['cols'] %}
+        <td style="background-color: lightseagreen; border-right: 1px solid blue;" colspan="1">
+            {% if col['text'] != 'NS' %}
+                <img src="{{ url_for('static', filename='data/machine_')}}{{machine['id']}}/avatars/{{col['avatar']}}"
+                style="width:32px; height:32px;"><br>
+            {% endif %}
+            {{ col['text'] }}<br> {{ col['sensor_id'] }}
+        </td>
+        {% endfor %}
+    </tr>
+    {% elif row['tipo'] == 'onsite' %}
+    <tr>
+        <td style="background-image: linear-gradient(to right, lightskyblue, #ccffcc); border-right: 1px solid blue;" colspan="2">
+            <img src="{{ url_for('static', filename='images/avatars/tasks/')}}{{ row['avatar'] }}"
+            style="width:40px; height:40px;margin: 0 12px 0 12px;"
+            ><br>{{ row['title'] }}<br> {{ row['task_id'] }}</td>
+        {% for col in row['cols'] %}
+        {% if col['text'] != '--' %}
+        <td style="border-right: 1px solid blue; background-color: #ccffcc">{{ col['text'] }}, {{ col['part_id'] }}<br> 
+        <input type="checkbox" id="{{ col['cel_id'] }}" checked >
+        <br>{{ row['task_id']}}_{{col['part_id']}}_{{col['sensor_id']}}
+        </td>
+        {% else %}
+        <td style="border-right: 1px solid blue;"> {{ col['text'] }} </td>
+        {% endif%}
+        {% endfor %}
+    </tr>
+    {% elif row['tipo'] == 'any' %}
+    <tr>
+        <td style="background-image: linear-gradient(to right, lightskyblue, #ffcccc); border-right: 1px solid blue;" colspan="2">
+            <img src="{{ url_for('static', filename='images/avatars/tasks/')}}{{ row['avatar'] }}"
+            style="width:40px; height:40px;margin: 0 12px 0 12px;"
+            ><br>{{ row['title'] }}<br> {{ row['task_id'] }}</td>
+        {% for col in row['cols'] %}
+            {# if col['text'] == row['name2'] #}
+            {% if col['own_s'] == row['sensor_id'] %}
+            
+            <td style="background-color: #ffcccc; border-right: 1px solid blue;">{{ col['text'] }} <br>
+                <input type="radio" name="{{ row['fname'] }}" id="{{ col['cel_id'] }}" checked><br>
+                {{ col['cel_id'] }} <br>
+                {{ row['task_id']}}_{{col['part_id']}}_{{ col['own_s'] }}_{{row['sensor_id']}}       
+            </td>
+        {% else %}
+        <td style="background-color: #ffcccc; border-right: 1px solid blue;">{{ col['text'] }}<br>
+            <input type="radio" name="{{ row['fname'] }}" id="{{ col['cel_id'] }}"  ><br/>
+            {{ col['cel_id'] }} <br>
+            {{ row['task_id']}}_{{col['part_id']}}_{{ col['own_s'] }}_{{row['sensor_id']}}
+        {% endif %}
+        {% endfor %}
+    </tr>
+    {% endif %}
+    {% endfor%}
+    </table>
+    <div >     
+        <form method='POST' novalidate>
+        {{ form.hidden_tag() }}
+        {{ form.pack.label }} <br/>
+        {{ form.pack(cols="48", rows="26" )}}<br>
+        {{ form.submitpk }}
+        </form>
+    </div>
+</div>
+{{machine['a_status']}}<br>
+<div style="float: left" id="fuera0"></div><br>
+<script>
+    // Paso de variables a Json
+    tablejs = {{ table | tojson}}
+    // Definición de las constantes
+    const matricula = document.getElementById("matricula");
+    // definidos por default
+    // Variables
+    tasks = {};  
+    // Aqui vamos crear las listas de las tareas a crear
+    for (const x in tablejs ){  
+        let x0 = x -2;
+        onsite = [];    
+        // las tareas onsite
+        if (tablejs[x]['tipo'] == 'onsite'){
+            onsite = []
+            tasks[tablejs[x]['title']]= {'name': tablejs[x]['title']};        
+            tasks[tablejs[x]['title']]['tipo'] = tablejs[x]['tipo'];
+            for ( const y in tablejs[x]['cols'] ){
+                if (tablejs[x]['cols'][y]['text'] != '--'){
+                    onsite.push(tablejs[x]['cols'][y]['cel_id']);
+                }
+            }
+            tasks[tablejs[x]['title']]['ids'] = onsite;
+            tasks[tablejs[x]['title']]['machine'] = {{machine['id']}};
+        }else if(tablejs[x]['tipo'] == 'any'){  // las tareas any
+            onsite = [];
+            tasks[tablejs[x]['fname']] = {'name': tablejs[x]['title']};
+            tasks[tablejs[x]['fname']]['tipo'] = tablejs[x]['tipo'];
+            for ( const y in tablejs[x]['cols']){
+                onsite.push(tablejs[x]['cols'][y]['cel_id']);
+            }
+            tasks[tablejs[x]['fname']]['ids'] = onsite;
+            tasks[tablejs[x]['fname']]['machine'] = {{machine['id']}};
+        }
+    }
+    document.getElementById('pack').value = JSON.stringify(tasks, null, 2);
+    // Listeners
+    matricula.addEventListener("click", function(){
+        selected = [];
+        for ( var key in tasks ){
+            selected = [];
+            let flen = tasks[key]['ids'].length;
+            for (i=0; i< flen ; i++){
+                if ( document.getElementById(tasks[key]['ids'][i]).checked == true) {
+                    selected.push(tasks[key]['ids'][i]); 
+                }
+            tasks[key]['sel']=selected;
+            document.getElementById('pack').value = JSON.stringify(tasks, null, 2);                
+            }
+        }
+    })
+</script>
+{% endblock %}

@@ -1,5 +1,5 @@
 import io
-from flask import Flask, render_template, url_for, request, redirect, Response
+from flask import Flask, render_template, url_for, request, redirect, Response, jsonify, make_response
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib as mpl
@@ -10,17 +10,32 @@ from forms import *
 from medidas_gen import *
 from req_sensors import *
 from queries import *
-from schedule import *
-#import time
+from agenda import *
+import datetime as dt
 import json
 from werkzeug.utils import secure_filename
+import os
+import time
 
 app = Flask(__name__)
 app.config['SECRET_KEY']='MySEcuRiTY71315404kEyI2'
 
-@app.route('/')
-def net_conf():
-    return render_template('net_conf.html')
+def sensor():
+    """ Function for test purposes. """
+    print(str(dt.datetime.now()) + " --  Scheduler is alive!")
+
+app.route('/')
+def home():
+    nav_menu ={}
+    nav_menu['rol'] = 0
+    l_maq = get_machines_dict()
+    return render_template('home.html', nav_menu=nav_menu, l_maq=l_maq)
+
+@app.route('/red_serv')
+def red_serv():
+    nav_menu ={}
+    nav_menu['rol'] = 0
+    return render_template('net_conf.html', nav_menu=nav_menu)
 
 @app.route('/wifi_conf')
 def wifi_conf():
@@ -367,55 +382,67 @@ def sensor():
 
 @app.route('/<int:id_m>/machine', methods=('GET','POST'))
 def machine(id_m):
+    nav_menu = {}
+    nav_menu['rol'] = 0
+    nav_menu['where']  = 3
     machined = get_machine(id_m)
     tasksd = get_machine_scope_task(id_m)
     partsd = get_machine_parts(id_m)
-    nav_menu = 3
-    return render_template("machine.html", machined=machined, partsd=partsd, nav_menu=nav_menu, tasksd=tasksd)
+    mq_form = create_machine()
+    j_form = send_JSONpack()
+    pic_form = upload_file()
+    j_lines = get_journal_lines(machined['journal'],'machine',id_m)
+    if mq_form.validate_on_submit():
+        pointer = ('machines', id_m)
+        dict = mq_form.data
+        dict.pop('submit',None)
+        dict.pop('csrf_token', None)
+        file = app.root_path+'/static/data/machine_'+str(id_m)+'/'+machined['journal']
+        msg = {}
+        msg['pack'] = 'Se han cambiado los valores de la maquina.'
+        journal_writer(file, msg)
+        update_table_register(pointer,dict)
+        return redirect(url_for("machine", id_m = id_m))
+    if j_form.validate_on_submit():
+        file = app.root_path+'/static/data/machine_'+str(id_m)+'/'+machined['journal']
+        journal_writer(file, j_form.data)
+        return redirect(url_for("machine", id_m = id_m))
 
-@app.route('/<int:id_m>/machine_ec', methods = ('GET','POST'))
-def machine_ec(id_m):
-    if id_m == 99:
-        form = create_machine()
-        formp = create_part()
-        part_ord = 1
-        machined = get_machine(1)
-        parts_t = get_parts_templates()
-        tasksd = get_machine_scope_task(1)
-        parts_ava = []
-        for part in parts_t:
-            parts_ava.append(part['avatar'][:-4])
-        nav_menu = 3
-        path = '/home/pi/caja_server/web_app/static/images/avatars/machines/default'
-        m_avatars = get_files_by_ext(path,'.png')
-        if form.validate_on_submit():
-            machine_new = create_new_machine(request.form)
-            return redirect(url_for('machine_ec', id_m = machine_new['id']))
-        return render_template("machine_ec.html", machined=machined, nav_menu=nav_menu, tasksd=tasksd, form=form, 
+    if pic_form.validate_on_submit():
+        f= pic_form.documento.data
+        filename = secure_filename(f.filename)
+        name2save = app.root_path+"/static/data/machine_"+str(machined['id'])+"/pictures/"+filename
+        f.save(name2save)
+        file = app.root_path+'/static/data/machine_'+str(id_m)+'/'+machined['journal']
+        msg = {}
+        msg['pack'] = 'Se a agregado / cambiado la foto de la maquina.'
+        journal_writer(file, msg)
+        conn = get_db_connection()
+        conn.execute('UPDATE machines SET picture = ? WHERE id = ?',(filename, id_m))
+        conn.commit()
+        conn.close()
+        return redirect(url_for("machine", id_m = id_m))
+
+    return render_template("machine.html", machined=machined, partsd=partsd, nav_menu=nav_menu, tasksd=tasksd, 
+    mq_form=mq_form, j_lines=j_lines, j_form=j_form, pic_form=pic_form)
+
+@app.route('/machines', methods = ('GET','POST'))
+def machine_ec():
+    nav_menu={}
+    nav_menu['rol']=0
+    formp = create_part()
+    part_ord = 1
+    machined = get_machine(1)
+    parts_t = get_parts_templates()
+    tasksd = get_machine_scope_task(1)
+    parts_ava = []
+    for part in parts_t:
+        parts_ava.append(part['avatar'][:-4])
+    nav_menu['where'] = 3
+    path = '/home/pi/caja_server/web_app/static/images/avatars/machines/default'
+    m_avatars = get_files_by_ext(path,'.png')
+    return render_template("machine_ec.html", machined=machined, nav_menu=nav_menu, tasksd=tasksd, 
             parts_t=parts_t,parts_ava= parts_ava, m_avatars=m_avatars, formp=formp, part_ord=str(part_ord),parts=[])
-    else:
-        form = create_machine()
-        part_ord = 1
-        parts = get_machine_parts(id_m)
-        for part in parts:
-            part_ord = part_ord+1;
-        formp = create_part(ordinal=part_ord)
-        machined = get_machine(id_m)
-        tasksd = get_machine_scope_task(id_m)
-        parts_t = get_parts_templates()
-        parts_ava = []
-        for part in parts_t:
-            parts_ava.append(part['avatar'][:-4])
-        nav_menu = 3
-        print(parts_ava)
-        path = '/home/pi/caja_server/web_app/static/images/avatars/machines/default'
-        m_avatars = get_files_by_ext(path,'.png')
-        if formp.validate_on_submit():
-            consulta = create_new_part(request.form)
-            return redirect(url_for('machine_ec', id_m = id_m ))
-            #return render_template("test_page.html", result=request.form) !mala pratica
-        return render_template("machine_ec.html", machined=machined, nav_menu=nav_menu, tasksd=tasksd, form=form,
-            parts_t=parts_t, parts_ava= parts_ava, m_avatars=m_avatars, formp=formp, part_ord=str(part_ord),parts=parts)
 
 @app.route('/<int:id_pt>/create_part_template', methods = ('GET','POST'))
 def create_part_template(id_pt):
@@ -473,18 +500,184 @@ def part(id_p,rol):
             return render_template("test_page.html",result=form.data)
         return render_template('part_ec.html', machined=machined, partd=partd, s_fields=s_fields, nav_menu = nav_menu, form=form)
 
-@app.route('/<int:id_t>/task')
+@app.route('/<int:id_t>/task', methods = ('GET', 'POST'))
 def task(id_t):
+    nav_menu={}
+    nav_menu['rol'] = 0
+    nav_menu['where'] = 5
     taskd = get_task(id_t)
     machined = get_machine(taskd['id_machine'])
     partsd = get_machine_parts(id_t)
 # info del time-table
-    w_block = gen_week_block(id_t)
+# w_block = gen_week_block(id_t)
+    w_block = gen_week_block(taskd)
 # info de los items especificos
     s_fields = json.loads(taskd['s_fields'])
-    nav_menu = 5
-    return render_template("task.html", machined=machined, partsd=partsd, nav_menu=nav_menu, taskd=taskd, w_block=w_block, s_fields=s_fields)
+    start = dt.time.fromisoformat(taskd['hf_start'])
+    end = dt.time.fromisoformat(taskd['hf_end'])
+    form_tk = task_data(t_int_m=w_block[-1]['m_interval'], t_int_h=w_block[-1]['h_interval'], hf_start_h=start.hour,
+        hf_start_m=start.minute, hf_end_h=end.hour, hf_end_m=end.minute)
+    if form_tk.validate_on_submit():
+        pointer = ('tasks',id_t)
+        dict = {}
+        if int(form_tk.data['t_int_h']) == 0 and int(form_tk.data['t_int_m']) == 0 :
+            dict['t_interval'] = 15
+        else:
+            dict['t_interval'] = (int(form_tk.data['t_int_h'])*4)*15 + int(form_tk.data['t_int_m'])
+        dict['d_allow'] = form_tk.data['d_allow']
+        dict['hf_start'] = dt.time(int(form_tk.data['hf_start_h']),int(form_tk.data['hf_start_m'])).strftime('%H:%M:%S')
+        dict['hf_end'] = dt.time(int(form_tk.data['hf_end_h']),int(form_tk.data['hf_end_m'])).strftime('%H:%M:%S')
+        print(form_tk.data)
+        update_table_register(pointer,dict)
+        return redirect(url_for("task", id_t=id_t))
+    return render_template("task.html", machined=machined, partsd=partsd, nav_menu=nav_menu, taskd=taskd, 
+        w_block=w_block, s_fields=s_fields, form_tk = form_tk)
 
+@app.route('/<int:id_m>/machine_ec2', methods = ('GET','POST'))
+def machine_ec2(id_m):
+    if id_m == 99:
+        nav_menu={}
+        nav_menu['rol'] = 0
+        nav_menu['where'] = 3
+        mq_form = create_machine()
+        insumos = {}
+        insumos['completed'] = 0
+        insumos['path'] = '/home/pi/caja_server/web_app/static/images/avatars/machines/default/'
+        insumos['path_rel'] = 'images/avatars/machines/default/'
+        insumos['path_rel_foto'] ='images/pictures/machines/default/'
+        insumos['m_avatars'] = get_files_by_ext(insumos['path'],'.png')
+        if mq_form.validate_on_submit():
+            machine_new = create_new_machine(mq_form.data)
+            id_m = machine_new['id']
+            return redirect(url_for("machine_ec2", id_m = id_m))   
+        return render_template("machine_ec2.html", nav_menu=nav_menu, mq_form=mq_form, insumos=insumos)
+    else:
+        machine = get_machine(id_m)
+        if machine['a_status'] == 6 or machine['a_status'] == 7:
+            parts = get_machine_parts(id_m)
+            nav_menu={}
+            nav_menu['rol'] = 0
+            nav_menu['where'] = 4
+            insumos = {}
+            insumos['completed'] = 20
+            insumos['path'] = 'data/machine_'+str(machine['id'])
+            insumos['ord'] = 1
+            for part in parts:
+                insumos['ord'] = insumos['ord']+1
+            parts_temp = get_parts_templates_dict()
+            formp = create_part2(ordinal=insumos['ord'])
+            formf = update_field_tablereg()
+            if formp.validate_on_submit():
+                create_new_part2(formp.data)
+                return redirect(url_for("machine_ec2", id_m = id_m)) 
+            if formf.validate_on_submit():
+                update_table_register((formf.data['table'],str(formf.data['id'])),{"a_status " : 8 })
+                return redirect(url_for("machine_ec2", id_m=id_m))
+            return render_template("machine_ec2p.html",nav_menu=nav_menu, insumos=insumos, machine=machine, parts_temp=parts_temp, 
+            formp=formp, formf=formf, parts=parts)
+        elif machine['a_status'] == 8 or machine['a_status'] == 9:
+            parts = get_machine_parts_dict(id_m)
+            forms = enrroll_sensor()
+            formsr = send_sensor_req(requirement='meas9')
+            nav_menu={}
+            nav_menu['rol'] = 0
+            nav_menu['where'] = 4
+            insumos = {}
+            insumos['completed'] = 40
+            insumos['path'] = 'data/machine_'+str(machine['id'])
+            insumos['text1'] = ''
+            sensores = get_sensors()
+            formf = update_field_tablereg()
+            if formsr.validate_on_submit():
+                insumos['text0'] = deal_req(formsr.requirement.data, formsr.mac_address.data)
+                print(insumos['text0']['envio'])
+                insumos['text1'] = deal_req('meas10',formsr.mac_address.data)
+                name = str(insumos['text1']['id'])[0:7]
+                insumos['act_part']= formsr.extra_int.data
+                sensor_temp = get_sensor_template(name)
+                insumos['s_fields'] = sensor_temp['s_fields']
+                insumos['capacities'] = sensor_temp['capacities']
+                insumos['description'] = sensor_temp['description']
+                insumos['avatar'] = sensor_temp['avatar']           
+                return render_template("machine_ec2s.html",nav_menu=nav_menu, parts=parts, sensores=sensores, machine=machine, 
+                        insumos=insumos, forms=forms, formsr=formsr, formf=formf)
+            if forms.validate_on_submit():
+                result= pair_sensor2part(forms.data, id_m)
+                update_table_register(("machines",str(id_m)),{"a_status " : 9 })
+                return redirect(url_for("machine_ec2", id_m=id_m)) 
+            if formf.validate_on_submit():
+                update_table_register((formf.data['table'],str(formf.data['id'])),{"a_status " : 10 })
+                insumos['completed'] = 60
+                return redirect(url_for("machine_ec2", id_m=id_m))
+            return render_template("machine_ec2s.html",nav_menu=nav_menu, parts=parts, sensores=sensores, machine=machine, insumos=insumos, 
+                    forms=forms, formsr=formsr, formf=formf)
+        elif machine['a_status'] == 10:
+            nav_menu={}
+            nav_menu['rol'] = 0
+            nav_menu['where'] = 5
+            form = send_JSONpack()
+            parts = get_machine_parts_dict(id_m)
+            sensors, capa = get_sensors_machine(id_m)
+            insumos = {}
+            parts = get_machine_parts_dict(id_m)
+            tasks = get_task_templates_dict(sensors)
+            insumos['completed'] = 60
+            insumos['path'] = 'data/machine_'+str(machine['id'])
+            for part in parts:
+                part['sensors'] = []
+                part['n_sensors'] = 1
+                for sensor in sensors:
+                    if part['id'] == sensor['part_id']:
+                        part['n_sensors']=part['n_sensors']+1
+                        part['sensors'].append({'alias':sensor['alias'], 'sensor_id':sensor['id'], 'avatar':sensor['avatar'],'part_id':part['id']})
+                #print(part)
+            table = generate_meas__table(machine['name'],parts,sensors,tasks)
+            if form.validate_on_submit():
+                pack = json.loads(form.data['pack'])
+                tareas = generate_tasks(pack)
+                print(len(tareas))
+                update_table_register(("machines",str(id_m)),{"a_status " : 11 })
+                return redirect(url_for("machine_ec2", id_m=id_m))
+            return render_template("machine_ec2t.html",nav_menu=nav_menu, parts=parts, tasks=tasks,sensors=sensors, form = form,
+                    machine=machine,insumos=insumos, table=table)
+        elif machine['a_status'] == 11:
+            nav_menu={}
+            nav_menu['rol'] = 0
+            nav_menu['where'] = 5
+            insumos = {}
+            insumos['completed'] = 80
+            form = send_JSONpack(pack="change")
+            if form.validate_on_submit():
+                update_table_register(("machines",str(id_m)),{"a_status " : 1 })
+                return redirect(url_for("machine", id_m=id_m))
+            return render_template("machine_ec2d.html", nav_menu=nav_menu, insumos=insumos, machine=machine, form=form)
+
+@app.route('/formas', methods = ('GET', 'POST'))
+def formas():
+     formsr = send_sensor_req(requirement='meas9')
+     if formsr.validate_on_submit():
+         print('forma validada!! ')
+         text = deal_req(formsr.requirement.data, formsr.mac_address.data)
+         print(text)
+         return render_template("test_page.html",result=formsr.data, text=text)
+     return render_template("form_helper.html", formsr=formsr)
+
+@app.route("/check_time_table", methods = ["POST"])
+def check_time_table():
+    req = request.get_json(force=True)
+    print(req)
+    taskd = get_task_dict(int(req['id_t']))
+    if int(req['t_int_h']) == 0 and int(req['t_int_m']) == 0 :
+        taskd['t_interval'] = 15
+    else:
+        taskd['t_interval'] = (int(req['t_int_h'])*4)*15 + int(req['t_int_m'])
+    taskd['d_allow'] = int(req['d_allow'])
+    taskd['hf_start'] = dt.time(int(req['hf_start_h']),int(req['hf_start_m'])).strftime('%H:%M:%S')
+    taskd['hf_end'] = dt.time(int(req['hf_end_h']),int(req['hf_end_m'])).strftime('%H:%M:%S') 
+    w_sch = gen_week_block(taskd)
+    print(w_sch)
+    res = make_response(jsonify(w_sch), 200)
+    return res
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug = True)
+   app.run(host="0.0.0.0", debug = True)

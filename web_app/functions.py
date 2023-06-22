@@ -170,3 +170,64 @@ def get_files_by_ext(path,ext):
         if x.endswith(ext):
            result.append(x)
     return result
+
+# Genera la una lista de diccionarios desde triple entrada que para generar la tabla sensore vs medidas
+def generate_meas__table(machine, parts, sensors, tasks):
+    table = []
+    pre_cols = []
+    # creación de la primera fila
+    for part in parts:
+        pre_cols.append({'text':part['name'], 'colspan':part['n_sensors'],'sensors': part['sensors'],'avatar':part['avatar'],
+            'part_id':part['id']})
+    table.append({'title': machine,'tipo': 'h1','cols' : pre_cols})
+    # creación de la segunda fila
+    pre_cols = []
+    for col in table[0]['cols']:
+        if not col['sensors']:
+            pre_cols.append({'text': 'NS', 'part_id':col['part_id']})
+        else:
+            for sen in col['sensors']:
+                pre_cols.append({'text':sen['alias'],'weg': 1/len(col['sensors']),'avatar':sen['avatar'],'part_id':sen['part_id'],
+                    'sensor_id': sen['sensor_id']})
+    table.append({'title':'Tareas','title2':'Sensores','tipo': 'h2','cols' : pre_cols })  
+# aqui vamos a empezar a desempaquetar las tareas
+    for task in tasks:
+        pre_cols = []
+        # para tipo 'onsite'
+        if task['site'] == 'onsite':
+            for col in table[1]['cols']:
+                if col['text'] == 'NS':
+                    pre_cols.append({'text': '--'})
+                else:
+                    pre_cols.append({'text': col['text'],'part_id':col['part_id'],'sensor_id':col['sensor_id'],
+                        'task_id':task['id'], 'cel_id': '_'+str(task['id'])+'_'+str(col['part_id'])+'_'+str(col['sensor_id']) })
+            table.append({'title': task['name'], 'avatar':task['avatar'], 'tipo': task['site'], 'cols': pre_cols,'task_id':task['id']})
+
+        # Para tareas tipo 'any'
+        elif task['site'] == 'any':
+            paso = 0
+            for col in table[1]['cols']:
+                if col['text'] == 'NS':
+                    pre_cols.append({'text':table[0]['cols'][round(paso)]['text'], 'part_id':col['part_id'], 'own_s': 'NO',
+                        'cel_id': '_'+str(task['id'])+'_'+str(col['part_id'])+'_NO'+'_'+str(task['sensor_id']) })
+                    paso = paso+1
+                else:
+                    pre_cols.append({'text': col['text'], 'part_id':col['part_id'], 'own_s': col['sensor_id'], 
+                    'cel_id': '_'+str(task['id'])+'_'+str(col['part_id'])+'_'+str(col['sensor_id'])+'_'+str(task['sensor_id']) })
+                    paso = paso + (col['weg'])
+            table.append({'title': task['name1'] +' @ '+task['name2'],'name2':task['name2'],'avatar':task['avatar'],'tipo': task['site'],
+                    'task_id':task['id'], 'cols': pre_cols,'sensor_id':task['sensor_id'],'fname':task['name1']+'_'+str(task['sensor_id'])})
+
+    return table
+
+def get_journal_lines(archivo, instance, id):
+    salida = []
+    journal = 'static/data/'+instance+'_'+str(id)+'/'+archivo
+    #journal = os.path.join(url_for())
+    #journal = os.path.join(app.root_path,text)
+    try:
+        with open (journal) as file:
+            salida = file.readlines()
+    except:
+        salida.append('No se cncuentra el archivo')
+    return salida

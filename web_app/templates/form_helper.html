@@ -1,0 +1,19 @@
+<form method='POST' novalidate>
+    {{ formsr.hidden_tag() }}
+<table style="font: 11px Arial, sans-serif; width:100%;" >
+    <tr><td>{{ formsr.mac_address.label }}</td><td>{{ formsr.mac_address(size=16) }}</td></tr>
+    <tr><td>{{ formsr.requirement.label }}</td><td>{{ formsr.requirement() }}</td></tr>   
+    <tr><td>{{ formsr.submit }}</td></tr> 
+</table>
+</form>
+</table>
+
+{% for error in formsr.mac_address.errors %}
+     <span style="color:red;"> {{ error }} </span> <br>
+{% endfor %}
+{# for error in mq_form.kw_nom.errors #}
+     <span style="color:red;"> {# error #} </span> <br>
+{# endfor #}
+{# for error in mq_form.rpm_nom.errors #}
+     <span style="color:red;"> {# error #} </span> <br>
+{# endfor #}

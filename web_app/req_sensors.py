@@ -22,7 +22,7 @@ def create_document(esp32):
     return filename, file2send
 
 def get_data_len(esp32):
-# Importa un JSON con el numero de mustras y la duración, ya hecha la toma
+# Importa un JSON con el numero de muestras y la duración, ya hecha la toma
     esp32.write(b'meas5')
     rawString = str(esp32.readline())
     newString = rawString[2:-5]
@@ -57,3 +57,13 @@ def get_data_points(tmuestra, file2write,esp32):
 #print("las iteraciones" + str(raw))
 #print("Las tomas" + str(samples))
 #esp32.close()
+def deal_req(requirirent,MAC):
+    print(requirirent)
+    print(MAC)
+    esp = serial.Serial('/dev/ttyUSB0', 115200, timeout=None)
+    text = str.encode(requirirent)
+    esp.write(text)
+    sleep(2)
+    line = json.loads(str(esp.readline())[2:-5])
+    esp.close()
+    return line

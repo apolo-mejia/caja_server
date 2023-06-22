@@ -1,0 +1,374 @@
+{% extends "base2.html" %}
+{% block styles %}
+{{ super() }}
+#content{
+    float: left;
+    width: 100%;
+    height:auto;
+    min-height: 200px; 
+    // border-radius: 8px;
+    min-width: 670px;
+    // margin: 5px 0 5px 0;
+    // border: 1px solid {{ border_color }};
+}
+#progress{
+    float: left;
+    width: 100%;
+    height: 30px;
+    min-height: 30px;
+    border-radius: 0px;
+    min-width: 670px;
+    margin: 5px 0 5px 0;
+    // border: 1px solid {{ border_color }};
+}
+.step{
+    display: flex;
+    align-items: center;
+    float: left;
+    width: 18%;
+    height:100%;
+    font: 11px Arial, sans-serif;
+    background-color: #ff9933;
+}
+.step_d{
+    display: flex;
+    align-items: center;
+    float: left;
+    width: 18%;
+    height:100%;
+    font: 11px Arial, sans-serif;
+    background-color: #fff2e6;
+}
+.step_a{
+    display: flex;
+    align-items: center;
+    float: left;
+    width: 18%;
+    height:100%;
+    font: 11px Arial, sans-serif;
+    background-image: linear-gradient(to right, #ff9933, #fff2e6)
+}
+#completed{
+    display: flex;
+    align-items: center;
+    justify-content: center ;
+    float: left;
+    width: 10%;
+    height:100%;
+    font: 11px Arial, sans-serif;
+}
+.step_container{
+    float: left;
+    width: 100%;
+    height: auto;
+    //100px;
+    // min-height: 100px;
+    // border-radius: 8px;
+    min-width: 670px;
+    margin: 1px 0 0 0;
+    font: 10px Arial, sans-serif;
+    background-color: #fff2e6;
+    //border: 1px solid {{ border_color }};
+    
+}
+#mq_datatxt{
+    float: left;
+    width: 20%;
+    min-width: 200px;
+    height: 100px;
+    background-color: #fff2e6;
+}
+#mq_avatar{
+    float: left;
+    width: 120px;
+    height: 100px;
+    //background-image: linear-gradient(to right, #ff9933, #fff2e6);
+    background-color: #fff2e6;
+    display : block;
+}
+#mq_foto{
+    float: left;
+    width: 120px;
+    height: 100px;
+    //background-image: linear-gradient(to right, #ff9933, #fff2e6);
+    background-color: #fff2e6;
+    display : block;
+}
+#mq_help_box{
+    float: left;
+    display: block;
+    width: 32%;
+    //min-width: 290px;
+    height: 100px;
+    background-color: #fff2e6;
+}
+#mq_help_box2{
+    float: left;
+    display: block;
+    width: 34%;
+    max-width: 290px;
+    height: 100px;
+    background-color: #fff2e6;
+}
+#plus_cont{
+    float: left;
+    //border: 1px solid blue;
+    //border-radius:4px; 
+    width: 84px;
+    margin:5px;
+}
+#end_cont{
+    float:left;
+    margin:5px;
+    {% if machine['a_status'] == 7 %}
+        display :block;
+    {% else %}
+        display : none;
+    {% endif %}
+}
+#parts_temp_cont{
+    float: left;
+    height: auto;
+    width: 100%;
+    background-color: transparent;
+    display : none;
+}
+.part_temp_cont{
+    float:left;
+    position:relative;
+    width:110px;
+    height: 200px;
+    min-height: 180px;
+    border: 1px solid brown;
+    border-radius: 4px;
+    margin: 0 5px 0px 0px;
+}
+.img_part_temp{
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 20px;
+    bottom: 0;
+    margin: 0 auto;
+    height: 50px;
+    width: 50px;
+}
+#part2add{
+    float:left;
+    //position:relative;
+    width:110px;
+    height: 200px;
+    min-height: 180px;
+    border: 1px solid brown;
+    border-radius: 4px;
+    margin: 0 5px 0px 0px;
+    display: none;
+    background-image: linear-gradient(to right, #ff9933, #fff2e6);
+}
+.partadded{
+    float:left;
+    //position:relative;
+    width:110px;
+    height: 200px;
+    min-height: 180px;
+    border: 1px solid brown;
+    border-radius: 4px;
+    margin: 0 5px 0px 0px;
+    display: block;
+    background-color: #ff9933;
+}
+#img_part_add{
+    //position: relative;
+    float:left;
+    margin: 0 12px 0 12px;
+}
+tr{
+    height: 30px;
+}
+{% endblock %}
+{% block content %}
+<div id="progress">
+    <div class="step">Crear Máquina</div>
+    <div class="step_a">Agregar Partes</div>
+    <div class="step_d">Vincular Sensores</div>
+    <div class="step_d">Asociar Tareas</div>
+    <div class="step_d">Configurar Dashboard</div>
+    <div id="completed">{{ insumos['completed'] }} % <br />completo</div>
+</div>
+<div class="step_container">
+    <div id="mq_datatxt">
+        <table>
+            <tr>
+                <td>Nombre máquina</td><td><input type="text" disabled size=11 value="{{ machine['name'] }}" ></td>
+            </tr>
+            <tr>
+                <td>Marca</td><td><input type="text" disabled size=11 value="{{ machine['brand'] }}"></td>
+            </tr>
+            <tr>
+                <td>Modelo</td><td><input type="text" disabled size=11 value="{{ machine['model']}}"></td>
+            </tr>
+        </table>
+    </div>
+    <div id="mq_avatar">
+        <img src="{{ url_for('static', filename=insumos['path']) }}/avatars/{{machine['avatarf']}}"
+             id="mq_avatar_img" style="width:100px; height:100px; padding: 0 10px 0 10px;">
+    </div>
+    <div id="mq_foto">
+        <img src="{{ url_for('static', filename='images/pictures/machines/default/no_picture.png') }}" id="mq_foto_img"
+        style="width:100px; height:100px; margin:0 10px 0 10px;">
+        
+    </div>
+    <div id="mq_help_box2">
+        <table>
+            <tr>
+                <td>Potencia Nominal</td><td><input type="text" disabled size=5 value="{{machine['kw_nom']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>    
+                <td>Frecuencia Nominal</td><td><input type="text" disabled size=5 value="{{machine['f_nom']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+            </tr>
+            <tr>
+                <td>Voltaje Nominal</td><td><input type="text" disabled size=5 value="{{machine['v_nom']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+                <td>Número de fases</td><td><input type="text" disabled size=5 value="{{machine['n_phases']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+            </tr>
+            <tr>
+                <td>Corriente Nominal</td><td><input type="text" disabled size=5 value="{{machine['i_nom']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+                <td>Grado Ip</td><td><input type="text" disabled size=5 value="{{machine['ip_grade']}}" 
+                    style="text-align:right; font: 10px Arial, sans-serif;"></td>
+            </tr>
+        </table>
+    </div>
+    <div id="mq_help_box">
+        <table>
+            <tr>
+                <td>Proceso Asociado</td>
+                <td><input type="text" disabled size=11 value="{{machine['id_process']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>    
+                <td>Serial de Fábrica</td>
+                <td><input type="text" disabled size=11 value="{{machine['m_serial']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+            </tr>
+            <tr>
+                <td>Plan Mantenimiento</td>
+                <td><input type="text" disabled size=11 value="{{machine['id_maintenance']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+                <td>Serial Interno</td>
+                <td><input type="text" disabled size=11 value="{{machine['i_serial']}}" 
+                    style="text-align:right;font: 10px Arial, sans-serif;"></td>
+            </tr>
+            <tr>
+                <td>Usuarios</td>
+                <td><input type="text" disabled size=11 value="{{machine['users']}}" style="font: 10px Arial, sans-serif;"></td>
+                <td>Descripción</td>
+                <td><textarea disabled size=5 value="{{machine['description']}}" 
+                    style="text-align:right; font: 10px Arial, sans-serif;"></textarea></td></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="step_container">
+    {% for part in parts %}
+    <div class="partadded">
+        <div style="text-align:center; font: 11px Arial, sans-serif;">{{ part['name']}}</div>
+        <img src="{{ url_for('static', filename='data/machine_') }}{{machine['id']}}/avatars/{{part['avatar']}}" 
+        style="width:84px; height:84px;margin: 0 12px 0 12px;">
+    </div>
+    {% endfor %}
+    <div id="part2add">
+        <div style="text-align:center; font: 12px Arial, sans-serif;">Parte a Adicionar</div>
+        <img src="{{ url_for('static', filename='images/avatar.png') }}" id="img_part_add" style="width:84px; height:84px;">
+        <div>
+            <form method='POST' novalidate>
+                {{ formp.hidden_tag() }}
+            <table style="width:100%;">
+                <tr style="height: 15px;"><td style="text-align: center;">{{ formp.namep.label }}</td></tr>
+                <tr style="height: 15px;"><td style="text-align: center;">{{ formp.namep(size=10, style="text-align:center; font: 10px Arial, sans-serif;") }}</td></tr>
+                <tr style="height: 15px;"><td style="text-align: center;">{{ formp.ordinal.label }}</td></tr>
+                <tr style="height:15px"><td style="text-align: center;">{{ formp.ordinal(style="font: 10px Arial, sans-serif;" , dir="rtl") }}</td></tr>
+                <tr style="height:15px; display: none;">
+                    <td>_ t {{ formp.template_id(style="width:30px") }} m {{ formp.machine_idp(style="width:30px") }}</td>
+                </tr>
+                <tr style="height:15px;" ><td style="text-align: center;" >{{ formp.submit(style="font: 10px Arial, sans-serif;") }}</td></tr>
+            </table>
+            </form>
+        </div>
+    </div>
+    <div style="float:left; width:100px;">
+        <div id="plus_cont">
+            <img src="{{ url_for('static', filename='images/plus.png') }}" style="width:84px; height:84px;">
+        </div>
+        <div id="end_cont">
+            <br>
+        <form method='POST' novalidate>
+            {{ formf.hidden_tag() }}
+            {# formf.table.label #}{{formf.table(value="machines", style="display:none")}}<br>
+            {# formf.id.label #}{{ formf.id(value=machine['id'], style="display:none" )}}
+            {{ formf.submit(style="text-align:center;") }}
+        </form>
+        </div>
+    </div>
+</div>
+<div id="parts_temp_cont">
+    {% for part_temp in parts_temp %}
+    <div class="part_temp_cont">
+    <img src="{{ url_for('static', filename='images/avatars/parts/default/')}}{{part_temp['avatar']}}" class="img_part_temp">
+    <div style="text-align:center; font: 12px Arial, sans-serif;">{{ part_temp['name'] }}</div>
+    <div style="position: absolute;top:72px; font: 10px Arial, sans-serif;margin: 0 auto; left:2px; text-align: justify;">
+        {{ part_temp['description'] }}</div>
+    </div>
+    {% endfor%}
+</div>
+{{machine['a_status']}}
+<script>
+    // Paso de variables a JSON
+    parts_tempjs = {{ parts_temp | tojson }}
+    // definición de las constantes
+    const plus_cont = document.getElementById("plus_cont");
+    const parts_temp_cont = document.getElementById("parts_temp_cont");
+    const part2add = document.getElementById("part2add");
+    const img_part_add = document.getElementById("img_part_add");
+    const namep = document.getElementById("namep");
+    const template_id = document.getElementById("template_id");
+    const machiche_idp = document.getElementById("machine_idp");
+    // Listeners de las constantes
+    plus_cont.addEventListener("mouseover", function(){
+        this.style.backgroundColor = "#ff9933";
+    })
+    plus_cont.addEventListener("mouseout", function(){
+        this.style.backgroundColor = "transparent";
+    })
+    plus_cont.addEventListener("click", function(){
+        if (parts_temp_cont.style.display == "block") {
+            parts_temp_cont.style.display = "none";
+            part2add.style.display = "none";
+        }else {
+            parts_temp_cont.style.display = "block";
+            part2add.style.display = "block";
+        }
+    })
+    var part_temp_cont = document.getElementsByClassName("part_temp_cont");
+    for (i = 0; i < part_temp_cont.length; i++){
+        let y = i;
+        part_temp_cont[i].addEventListener("mouseover", function(){
+            this.style.backgroundColor = "#ff9933";
+            img_part_add.src = "{{ url_for('static', filename='images/avatars/parts/default/')}}"+parts_tempjs[y]['avatar'];
+            namep.value = "{{machine['name']}}_" + parts_tempjs[y]['name'];
+            template_id.value = parts_tempjs[y]['id'];
+            machiche_idp.value = {{machine['id']}};
+        })
+        part_temp_cont[i].addEventListener("mouseout", function(){
+            this.style.backgroundColor = "transparent";
+        })
+        part_temp_cont[i].addEventListener("click", function(){
+            this.style.backgroundColor = "#ff9933";
+            img_part_add.src = "{{ url_for('static', filename='images/avatars/parts/default/')}}"+parts_tempjs[y]['avatar'];
+            namep.value = "{{machine['name']}}_" + parts_tempjs[y]['name'];
+            template_id.value = parts_tempjs[y]['id'];
+            parts_temp_cont.style.display = "none";
+            machiche_idp.value = {{machine['id']}};
+        })
+    }
+</script>
+{% endblock %}

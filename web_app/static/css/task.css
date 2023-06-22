@@ -1,7 +1,7 @@
 #components_cont{
   float: left;
   width: 100%;
-  heigth:130px;
+  height:130px;
   min-heigth: 100px;
   border: 1px solid blue;
   border-radius: 4px;
@@ -22,29 +22,7 @@
   margin: 5px;
 }
 
-#week_scheduler{
-  font: 11px Courier New;
-  display: grid;
-  grid-template-columns: repeat( 29, auto);
-  grid-gap: 1px;
-  background-color: #e6ebff;
-  padding: 5px;
-  border: 1px solid blue;
-  border-radius: 4px;
-  min-width: 660px;
-  margin: 0px;
-}
-.week_container{
-  background-color: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  padding: 2px;
-}
-.week_container_day{
-  background-color: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  padding: 2px;
-  grid-column : span 4;
-}
+
 #contend{
   float: left;
   width: 100%;
@@ -54,44 +32,6 @@
   border-radius: 4px;
   min-width: 670px;
   padding: 2px 0px 5px 0px;
-}
-
-#visual_des {
-  float: right;
-  width: 30%;
-  min-width: 60px;
-  background-color: transparent;
-  overflow: auto;
-  margin-right: 0px;
-}
-#visual_des a {
-  float: right;
-  width: 48%;
-  min-width: 30px;
-  border: 1px solid transparent;
-  border-radius: 3px;
-  text-align: center;
-  padding: 0;
-  transition: all 0.3s ease;
-  color: black;
-  font-size: 12px;
-  text-decoration: none;
-}
-#visial_des a:visited {
-  float: right;
-  width: 48%;
-  min-width: 30px;
-  border: 1px solid transparent;
-  border-radius: 3px;
-  text-align: center;
-  padding: 0;
-  transition: all 0.3s ease;
-  color: black;
-  font-size: 12px;
-  text-decoration: none;
-}
-#visual_des a:hover {
-  background-color: #8099ff;
 }
 
 /* Style the buttons that are used to open and close the accordion panel */

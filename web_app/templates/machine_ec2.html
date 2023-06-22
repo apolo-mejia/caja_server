@@ -1,0 +1,421 @@
+{% extends "base2.html" %}
+{% block styles %}
+{{ super() }}
+#content{
+    float: left;
+    width: 100%;
+    height:auto;
+    min-height: 200px; 
+    // border-radius: 8px;
+    min-width: 670px;
+    // margin: 5px 0 5px 0;
+    // border: 1px solid {{ border_color }};
+}
+#progress{
+    float: left;
+    width: 100%;
+    height: 30px;
+    min-height: 30px;
+    border-radius: 0px;
+    min-width: 670px;
+    margin: 5px 0 5px 0;
+    // border: 1px solid {{ border_color }};
+}
+.step{
+    display: flex;
+    align-items: center;
+    float: left;
+    width: 18%;
+    height:100%;
+    font: 11px Arial, sans-serif;
+    background-color: #ff9933;
+}
+.step_d{
+    display: flex;
+    align-items: center;
+    float: left;
+    width: 18%;
+    height:100%;
+    font: 11px Arial, sans-serif;
+    background-color: #fff2e6;
+}
+.step_a{
+    display: flex;
+    align-items: center;
+    float: left;
+    width: 18%;
+    height:100%;
+    font: 11px Arial, sans-serif;
+    background-image: linear-gradient(to right, #ff9933, #fff2e6)
+}
+#completed{
+    display: flex;
+    align-items: center;
+    justify-content: center ;
+    float: left;
+    width: 10%;
+    height:100%;
+    font: 11px Arial, sans-serif;
+}
+.step_container{
+    float: left;
+    width: 100%;
+    height: 100px;
+    // min-height: 100px;
+    // border-radius: 8px;
+    min-width: 670px;
+    margin: 1px 0 0 0;
+    font: 10px Arial, sans-serif;
+    //border: 1px solid {{ border_color }};
+}
+#mq_datatxt{
+    float: left;
+    width: 20%;
+    min-width: 200px;
+    height: 100%;
+    background-image: linear-gradient(to right, #ff9933, #fff2e6);
+}
+#mq_avatar{
+    float: left;
+    width: 120px;
+    height: 100px;
+    //background-image: linear-gradient(to right, #ff9933, #fff2e6);
+    background-color: #fff2e6;
+    display : none;
+}
+#mq_avatars{
+    float: left;
+    width: 100%;
+    background-color: #fff2e6;
+}
+#mq_foto{
+    float: left;
+    width: 120px;
+    height: 100px;
+    //background-image: linear-gradient(to right, #ff9933, #fff2e6);
+    background-color: #fff2e6;
+    display : none;
+}
+#mq_add_info{
+    float: left;
+    width: 120px;
+    height: 100px;
+    //background-image: linear-gradient(to right, #ff9933, #fff2e6);
+    background-color: #fff2e6;
+    display : none;
+}
+#mq_add_infos{
+    float: left;
+    height: auto;
+    width: 100%;
+    background-color: #fff2e6;
+    display : none;
+}
+#mq_help_box{
+    float: none;
+    display: block;
+    width: auto;
+    min-width: 250px;
+    height: 100%;
+    background-image: linear-gradient(to right, #fff2e6, #ff9933);
+}
+tr{
+    height: 30px;
+}
+{% endblock %}
+{% block content %}
+<div id="progress">
+    <div class="step_a">Crear Máquina</div>
+    <div class="step_d">Agregar Partes</div>
+    <div class="step_d">Vincular Sensores</div>
+    <div class="step_d">Asociar Tareas</div>
+    <div class="step_d">Configurar Dashboard</div>
+    <div id="completed">{{ insumos['completed'] }} % <br />completo</div>
+</div>
+<div class="step_container">
+    <div id="mq_datatxt">
+        <table>
+            <tr>
+                <td>{{ mq_form.name.label }}</td><td><input type="text" size=11 id="mq_name" name="mq_name"></td>
+            </tr>
+            <tr>
+                <td>{{ mq_form.kw_nom.label }}</td>
+                <td><input type="number" id="mq_kw_nom" name="mq_kw_nom" disabled
+                        style="width:98px; text-align: right;"></td>
+            </tr>
+        </table>
+    </div>
+    <div id="mq_avatar">
+        <img src="{{ url_for('static', filename='images/avatars/machines/default/maquina_def.png') }}"
+            id="mq_avatar_img" style="width:100px; height:100px; padding: 0 10px 0 10px;">
+    </div>
+    <div id="mq_foto">
+        <img src="" id="mq_foto_img">
+        <table id="mq_foto_buttons">
+            <tr><td></td><td></td></tr>
+            <tr><td><button style="font: 11px Arial sans-serif;" disabled> Cargar foto</button></td></tr>
+            <tr><td><button style="font: 11px Arial sans-serif;" id="skip_foto"> Seguir sin foto</button></td></tr>
+        </table>
+    </div>
+    <div id="mq_add_info">
+       
+        <table id="mq_add_infobuttons">
+            <form method='POST' novalidate>
+                {{ mq_form.hidden_tag() }}
+            <tr><td></td><td></td></tr>
+            <tr><td>{{ mq_form.submit }}</td></tr -->
+            <tr><td></td></tr>
+        </table>
+    </div>
+    <div id="mq_help_box">
+        <table>
+            <tr><td>-- ></td><td> Ingresa un nombre único para tu máquina </td></tr>
+            <tr><td>-- ></td><td> Ingresa la potencia Nominal de la máquina </td></tr>
+        </table>
+    </div>
+</div>
+<div id="mq_avatars" style="display:none;">
+    {% for avatar in insumos['m_avatars'] %}
+    <img src="{{ url_for('static', filename=insumos['path_rel'] + avatar)}}" class="mq_avatar_sel"
+        style="width:80px; height:80px; padding:5px;">
+    {% endfor %}
+</div>
+<div id="mq_add_infos">
+    
+    <table style="font: 11px Arial, sans-serif; width:100%;" >
+        <tr>
+            <td colspan="2" style="text-align: center;">Datos Referencia</td>
+            <td colspan="2" style="text-align: center; background-color: #ffd7b3;">Valores de Alimentación</td>
+            <td colspan="2" style="text-align: center;">Mecánicos / Otros</td>
+            <td colspan="2" style="text-align: center; background-color: #ffd7b3;">Datos descriptivos</td>
+        </tr>  
+        <tr>
+            <td>{{ mq_form.name.label }}</td>
+            <td><span id="name2send" ></span></span>{{ mq_form.name(size=11, style="display:none") }} </td>
+            <td style="background-color: #ffd7b3">{{ mq_form.kw_nom.label }}</td>
+            <td style="background-color: #ffd7b3"><span id="pot2send"></span>{{ mq_form.kw_nom(style="width:98px; display:none;") }} </td>
+            <td>{{ mq_form.nema_class.label }}</td><td>{{ mq_form.nema_class(style="font: 11px Arial, sans-serif; width:106px;", dir="rtl") }}</td>
+            <td style="background-color: #ffd7b3">{{ mq_form.avatarf.label }}</td>
+            <td style="background-color: #ffd7b3"><span id="avatar2send"></span>{{ mq_form.avatarf(size=11, style="display:none;") }}</td>
+            <!--td></td><td></td-->
+            </tr>
+        <tr>
+            <td>{{ mq_form.id_process.label }}</td><td>{{ mq_form.id_process(style="width:98px", value=1) }}</td>
+            <td style="background-color: #ffd7b3">{{ mq_form.rpm_nom.label }}</td>
+            <td style="background-color: #ffd7b3">{{ mq_form.rpm_nom(style="width:98px", value=1) }}
+                {% for error in mq_form.rpm_nom.errors %}
+                <span style="color:red;"> {{ error }} </span> <br>
+               {% endfor %}
+            </td>
+            <td>{{ mq_form.ip_grade.label }}</td><td>{{ mq_form.ip_grade(size=11, value="NO") }}</td>
+            <td style="background-color: #ffd7b3">{{ mq_form.picture.label }}</td>
+            <td style="background-color: #ffd7b3">no_picture.png{{ mq_form.picture(size=11, value="no_picture.png", style="display:none;")}}</td>
+        </tr>
+        <tr>
+            <td>{{ mq_form.id_maintenance.label }}</td><td>{{ mq_form.id_maintenance(style="width:98px", value=1) }}</td>
+            <td style="background-color: #ffd7b3">{{ mq_form.i_nom.label }}</td>
+            <td style="background-color: #ffd7b3;">{{ mq_form.i_nom(style="width:98px", value=0) }}</td>
+            <td>{{ mq_form.housing.label }}</td><td>{{ mq_form.housing(size=11) }}</td>
+            <td style="background-color: #ffd7b3;"></td><td style="background-color: #ffd7b3;"></td>
+        </tr>
+        <tr>
+            <td>{{ mq_form.users.label }}</td><td >{{ mq_form.users(style="font: 11px Arial, sans-serif; width:106px") }}</td>
+            <td style="background-color: #ffd7b3;">{{ mq_form.v_nom.label }}</td>
+            <td style="background-color: #ffd7b3;">{{ mq_form.v_nom(style="width:98px", value=0) }}</td>
+            <td></td><td></td>
+            <td style="background-color: #ffd7b3;"></td><td style="background-color: #ffd7b3;"></td>         
+        </tr>
+        <tr>
+            <td>{{ mq_form.brand.label }}</td><td>{{ mq_form.brand(size=11) }}</td>
+            <td style="background-color: #ffd7b3;">{{ mq_form.n_phases.label }}</td>
+            <td style="background-color: #ffd7b3;"> {{ mq_form.n_phases(style="font: 11px Arial, sans-serif; width:106px;", dir="rtl") }}</td>
+            <td></td><td></td>
+            <td colspan="2" style="background-color: #ffd7b3;">{{ mq_form.description.label }}</td>
+        </tr>
+        <tr>
+            <td>{{ mq_form.model.label }}</td><td>{{ mq_form.model(size=11) }}</td>
+            <td style="background-color: #ffd7b3;">{{ mq_form.n_poles.label }}</td>
+            <td style="background-color: #ffd7b3;">{{ mq_form.n_poles(style="font: 11px Arial, sans-serif; width:106px;", dir="rtl") }}</td>
+            <td></td><td></td>
+            <td colspan="2" style="background-color: #ffd7b3;">{{ mq_form.description(style="font: 11px Arial, sans-serif;")}}</td>
+        </tr>
+        <tr>
+            <td>{{ mq_form.m_serial.label }}</td><td>{{ mq_form.m_serial(size=11) }}</td>
+            <td style="background-color: #ffd7b3;">{{ mq_form.f_nom.label }}</td>
+            <td style="background-color: #ffd7b3;">{{ mq_form.f_nom(style="font: 11px Arial, sans-serif; width:106px;", dir="rtl") }}</td>
+            <td></td><td></td>
+            <td colspan="2" style="background-color: #ffd7b3;">{{ mq_form.journal.label}}</td>
+        </tr>
+        <tr>
+            <td>{{ mq_form.i_serial.label }}</td><td>{{ mq_form.i_serial(size=11) }}</td>
+            <td style="background-color: #ffd7b3;"></td><td style="background-color: #ffd7b3;"></td>
+            <td></td><td></td>
+            <td colspan="2" style="background-color: #ffd7b3;">{{ mq_form.journal(style="font: 11px Arial, sans-serif;") }}</td>
+        </tr>
+    </form>
+    </table>
+</div>
+<div class="step_container">
+    Errores <br>
+    {% for error in mq_form.name.errors %}
+        <span style="color:red;"> {{ error }} </span> <br>
+    {% endfor %}
+    {% for error in mq_form.kw_nom.errors %}
+        <span style="color:red;"> {{ error }} </span> <br>
+    {% endfor %}
+  
+    {% for error in mq_form.id_maintenance.errors %}
+    <span style="color:red;"> {{ error }} </span> <br>
+   {% endfor %}
+</div>
+
+<script>
+    // Paso de variables a JSON
+    const insumosjs = {{ insumos | tojson }}
+    // Variables de control
+    var withness = 0;
+    // Constantes para los containers
+    const mq_datatxt = document.getElementById("mq_datatxt");
+    const mq_help_box = document.getElementById("mq_help_box");
+    // Constantes para maquina
+    const name = document.getElementById("name");
+    const mq_name = document.getElementById("mq_name");
+    const name2send = document.getElementById("name2send");
+    const kw_nom = document.getElementById("kw_nom");
+    const mq_kw_nom = document.getElementById("mq_kw_nom");
+    const pot2send = document.getElementById("pot2send");
+    const avatarf = document.getElementById("avatarf")
+    const mq_avatar_img = document.getElementById("mq_avatar_img");
+    const mq_avatar = document.getElementById("mq_avatar");
+    const mq_avatars = document.getElementById("mq_avatars");
+    const avatar2send =document.getElementById("avatar2send");
+    const mq_foto = document.getElementById("mq_foto");
+    const mq_foto_buttons = document.getElementById("mq_foto_buttons");
+    const mq_foto_img = document.getElementById("mq_foto_img");
+    const skip_foto = document.getElementById("skip_foto");
+    const mq_add_info = document.getElementById("mq_add_info");
+    const mq_add_infos = document.getElementById("mq_add_infos");
+    
+    // Variable de las Clases mq_avatar_sel
+    var mq_avatar_sel = document.getElementsByClassName("mq_avatar_sel");
+    for (i = 0; i < mq_avatar_sel.length; i++) {
+        let y = i;
+        mq_avatar_sel[i].addEventListener("mouseover", function () {
+            this.style.backgroundColor = "#ff9933";
+            mq_avatar_img.src = "{{ url_for( 'static', filename=insumos['path_rel']) }}" + insumosjs['m_avatars'][y];
+        })
+        mq_avatar_sel[i].addEventListener("mouseout", function () {
+            this.style.backgroundColor = "transparent";
+            
+        })
+        mq_avatar_sel[i].addEventListener("click", function () {
+            mq_avatar_img.src = "{{ url_for( 'static', filename=insumos['path_rel']) }}" + insumosjs['m_avatars'][y];
+            mq_help_box.innerHTML += "<br> Selección: " + insumosjs['m_avatars'][y] ;  
+            avatarf.value = insumosjs['m_avatars'][y];
+            avatar2send.innerText = insumosjs['m_avatars'][y];
+            withness = 3;
+            control (withness);
+        })
+    }
+    mq_name.addEventListener("change", function () {
+        withness = 1;
+        control(withness);
+    });
+    mq_kw_nom.addEventListener("change", function () {
+        withness = 2;
+        control(withness);
+    })
+    skip_foto.addEventListener("click", function(){
+        withness = 4;
+        control(withness);
+    })
+    // Funcion invocada para todo el proceso de edicion
+    function control(value) {
+        if (value == 1) {
+            mq_name.disabled = true;
+            mq_kw_nom.disabled = false;
+            name.value = mq_name.value;
+            name2send.innerText = mq_name.value;
+            mq_help_box.innerHTML =
+                "<table>"
+                + "<tr><td> ok </td><td> Ingreso de nombre máquina exitoso </td></tr>"
+                + "<tr><td> -> </td><td> Ingresa la potencia Nominal de la máquina en KW </td></tr>"
+                + "</table>";
+        } else if (value == 2) {
+            mq_name.disabled = true;
+            mq_kw_nom.disabled = true;
+            kw_nom.value = mq_kw_nom.value;
+            pot2send.innerText = mq_kw_nom.value;
+            mq_datatxt.style.backgroundImage = "linear-gradient(to right, #ff9933, #ff9933)"
+            mq_avatar.style.display = "block";
+            mq_avatars.style.display = "block";
+            mq_help_box.innerHTML =
+                "<table>"
+                + "<tr><td> ok </td><td> Ingreso de 'Potencia' exitoso </td></tr>"
+                + "<tr><td> --> </td><td> Selecciona el avatar que mas se ajuste a tu máquina </td></tr>"
+                + "</table>";
+        }else if (value == 3) {
+            mq_avatar_img.style.backgroundImage = "linear-gradient(to right, #ff9933, #ff9933)"
+            mq_avatars.style.display = "none";
+            mq_foto.style.display = "block";
+            mq_help_box.innerHTML =
+                "<table>"
+                + "<tr><td> ok </td><td> " + avatarf.value +" Cargado exitosamente.</td></tr>"
+                + "<tr><td> --> </td><td> Carga Una foto de la máquina </td></tr>"
+                + "<tr><td> --> </td><td> La Cargaré luego </td></tr>"
+                + "</table>"; 
+        }else if (value == 4){
+            mq_add_info.style.display = "block";
+            mq_add_infos.style.display ="block";
+            mq_foto_img.src = "{{ url_for( 'static', filename=insumos['path_rel_foto']) }}" + "no_picture.png";
+            mq_foto_img.style = "width:100px; height:100px;";
+            mq_foto.style.padding = "0 10px 0 10px"; 
+            mq_foto_buttons.style.display = "none";
+            mq_foto.style.backgroundImage = "linear-gradient(to right, #ff9933, #ff9933)"
+            mq_help_box.innerHTML =
+                "<table>"
+                + "<tr><td> <b>Información Adicional</b> </td></tr>"
+                + "<tr><td> Ingresa la información adicional que desees!!</td></tr>"
+                + "<tr><td> Puedes Ingresarla despues, en la opción editar máquina </td></tr>"
+                + "</table>"; 
+        }
+
+    }
+</script>
+{% endblock %}
+
+<!--
+CREATE TABLE machines (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+-- Reference fields
+ ok   name TEXT NOT NULL NOT NULL,
+ ok   id_process INTEGER NOT NULL,
+ ok   id_maintenance INTEGER NOT NULL,
+ ok   users TEXT NOT NULL,
+-- Optional reference values
+ ok   brand TEXT,
+ ok   model TEXT,
+ ok   m_serial TEXT,
+ ok   i_serial TEXT,
+-- Nominal values  Aqui voy
+ ok   kw_nom REAL NOT NULL,
+ ok   rpm_nom REAL NOT NULL,
+-- Optinal nominal values
+ ok   i_nom REAL,
+ ok   v_nom REAL,
+ ok   n_phases INTEGER,
+ ok   n_poles INTEGER,
+ ok   f_nom INTEGER,
+ -- Mecanical Others
+ Ok  nema_class TEXT,
+ Ok   ip_grade INTEGER,
+ o   housing INTEGER,
+--Description
+    a_status INTEGER NOT NULL,
+ ok   picture TEXT,
+ ok   avatarf TEXT,
+ ok   description TEXT, -- Pendiente por agrandar
+ ok   journal TEXT
+);
+->

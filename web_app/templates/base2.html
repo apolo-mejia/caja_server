@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+{% block head %}
+  <link rel="stylesheet" href="{# url_for('static', filename='css/base2.css') #} ">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.css')}} ">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/brands.css')}}" >
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/solid.css' )}}" >
+  <title> {% block title %}{% endblock %} - My webpage </title>
+{% endblock %}
+</head>
+{% if nav_menu['rol'] == 0 %}
+  {% set border_color = 'blue' %}
+  {% set hover_color = '#8099ff' %}
+  {% set sel_hover_color = '#e6ebff'%}
+{% elif nav_menu['rol'] == 1 %}
+  {% set border_color = 'silver' %}
+  {% set hover_color = 'silver'%}
+{% elif nav_menu['rol'] == 2 %}
+  {% set border_color = 'green' %}
+  {% set hover_color = '#00b300'%}
+{% else %}
+  {% set border_color = 'red' %}
+  {% set hover_color = '#ff3333'%}
+{% endif%}
+
+<style>
+{% block styles %}
+#header_cont{
+  float: left;
+  width: 100%;
+  height:100px;
+  border-radius: 8px;
+  min-width: 670px;
+  border: 1px solid {{ border_color }};
+}
+#avatar_user{
+  float : inherit;
+  height: 81px;
+  min-height: 81px;
+  width: 61px;
+  min-width: 61px;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 2px;
+  border: 1px solid {{ border_color }};
+}
+#user_data{
+  float: inherit;
+  height: 100%;
+  min-height: 81px;
+  width: 12%;
+  min-width: 110px;
+  font: 11px Arial, sans-serif;
+  margin-top: 5px;  
+}
+#nav{
+  background-color: transparent;
+  display: inline-block;
+  height: 100%;
+  min-height: 81px;
+  width: 55%;
+  min-width: 185px;
+  font: 10px Arial, sans-serif;
+  margin-top:1px;
+  margin-bottom:1px,
+}
+ul#navi{
+  list-style-type: none;
+  display: block;
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+}
+ul#navi li a{
+  padding: 0;
+  display: block;
+  width: 100%;
+  height: 35px;
+  color: black;
+  text-decoration: none;
+}
+ul#navi li a:hover span{
+  display: block;
+  padding: 0;
+  margin-top: -38px;
+  margin-left: 0;
+  margin-bottom: 1px;
+  width: 99%;
+  height: 125%;
+  border-radius : 3px;
+  border: 1px solid transparent;
+  top: 0;
+  font: 38px Arial, Helveltica, sans-serif;
+  color: #00cc00;
+  background-color: {{ hover_color }};
+}
+.scope{
+  float: left;
+  height: 28px;
+  width: 29%;
+  min-width: 55px;
+  background-color: transparent;
+  border-radius :3px;
+  border: 1px solid transparent;
+  padding: 14px 0px 4px 0px;
+  margin: 1px 0px 1px 0px;
+  font: 12px Arial, Helveltica, sans-serif;
+  color: auto;
+  text-align: center;
+}
+.scope_a{
+  float: left;
+  height: 28px;
+  width: 29%;
+  min-width: 55px;
+  border-radius :3px;
+  border: 1px solid transparent;
+  padding: 14px 0px 4px 0px;
+  margin: 1px 0px 1px 0px;
+  font: 12px Arial, Helveltica, sans-serif;
+  color: auto;
+  text-align: center;
+  background-color: {{ hover_color }};
+}
+#user_top{
+  color: black;
+  float : right;
+  height: 100%;
+  min-height: 81px;
+  width: 6%;
+  min-width: 81px;
+  margin-top: 5px;
+  margin-right:5px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+}
+#user_top a:link{
+  color:black;
+  font: 10px Arial, sans-serif;
+  text-decoration: none;
+  display: block;
+}
+#user_top a:visited{
+  color:black;
+  font: 10px Arial, sans-serif;
+  text-decoration: none;
+  display: block;
+}
+#user_top a:hover{
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font: 10px Arial, sans-serif;
+  color: black;
+  border-radius :3px;
+  border: 1px solid transparent;
+  margin-right:5px;
+  background-color:{{ hover_color }};
+}
+#footer_cont{
+  float: left;
+  width: 100%;
+  height: 55px;
+  border-radius: 5px;
+  min-width: 670px;
+  margin: 2px 0px 10px 0px;
+  border: 1px solid {{ border_color}};
+}
+.icon-bar {
+  float: right;
+  width: 30%;
+  min-width: 30px;
+  background-color: transparent;
+  overflow: auto;
+  margin-right: 5px;
+}
+.icon-bar a {
+  float: left;
+  width: 19%;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  text-align: center;
+  padding: 12px 0;
+  transition: all 0.3s ease;
+  color: black;
+  font-size: 24px;
+}
+
+.icon-bar a:visited {
+  float: left;
+  width: 19%;
+  border: 1px solid red;
+  border-radius: 5px;
+  text-align: center;
+  padding: 12px 0;
+  transition: all 0.3s ease;
+  color: black;
+  font-size: 24px;
+}
+.icon-bar a:hover {
+  background-color: {{ hover_color }};
+}
+{% endblock %}
+</style>
+<body>
+  <div id="header_cont" >
+    <div id="avatar_user">
+      <img src="{{ url_for('static', filename='images/avatar.png')}}" alt="Usuario" width="60" height="79" >
+    </div>
+    <div id="user_data">
+      <br>
+      <b>Usuario: </b> <a href="#"> apolo </a> <br>
+      <b>Perfil: </b> usuario de soporte <br>
+      <b>rol: </b> administrador
+    </div>
+    <div id="nav">
+      <ul id="navi">
+        {% if nav_menu['where'] == 1 %}
+        <li class="scope_a">
+        {% else %}
+        <li class="scope">
+        {% endif %}
+          <a href="#">
+            <b><i class="fa-solid fa-industry fa-2x"></i> PLANTA <i class="fa-solid fa-arrow-right-from-bracket"></i><b>
+            <span>  
+            </span>
+          </a>
+        </li>
+        {% if nav_menu['where'] == 2 %}
+        <li class="scope_a">
+        {% else %}
+        <li class="scope">
+        {% endif %}
+          <a href="#">
+            <b><i class="fa-solid fa-microchip fa-2x"></i> PROCESO <i class="fa-solid fa-arrow-right-from-bracket"></i></b>
+            <span>
+            </span>
+          </a>
+        </li> 
+        {% if nav_menu['where'] == 3 %}
+        <li class="scope_a">
+        {% else %}
+        <li class="scope">
+        {% endif %}
+          <a href="#"  >
+            <b><i class="fa-solid fa-tractor fa-2x"></i> MÁQUINA <i class="fa-solid fa-arrow-right-from-bracket"></i></b>
+            <span>
+            </span>
+          </a>
+        </li>
+        {% if nav_menu['where'] == 4 %} 
+        <li class="scope_a">
+        {% else %}
+        <li class="scope"> 
+        {% endif %}
+          <a href="#">
+            <b><i class="fa-solid fa-robot fa-2x"></i> PARTE <i class="fa-solid fa-arrow-right-from-bracket "></i></b>
+            <span>
+            </span>
+          </a>
+        </li> 
+        {% if nav_menu['where'] == 5 %}
+        <li class="scope_a">
+        {% else %}
+        <li class="scope">
+        {% endif %}
+          <a href="#">
+            <b><i class="fa-solid fa-list-check fa-2x"></i> TAREAS <i class="fa-solid fa-arrow-right-from-bracket "></i></b>
+            <span>
+            </span>
+          </a>
+        </li>
+        {% if nav_menu['where'] == 6 %}
+        <li class="scope_a">
+        {% else %}
+        <li class="scope">
+        {% endif %}
+            <a href="#">
+            <b><i class="fa-solid fa-mobile fa-2x"></i> SENSOR </b>
+            <span>
+            </span>
+          </a>
+        </li>      
+      </lu>
+    </div>
+    <div id="user_top">
+      <a href="{{ url_for('red_serv') }}" >   
+        <b><i class="fa-solid fa-circle-nodes fa-6x" ></i></b>
+        Red/Servicios
+      </a>
+    </div>
+  </div>
+  <div id="content">
+    {% block content %} {% endblock %} 
+  </div>
+  <div id="footer_cont">
+    {% block footer %}
+      Desarollado 100% en <i class="fab fa-creative-commons"></i>
+    {% endblock %}
+  <div class="icon-bar">
+    <a href="{{ url_for('home') }}" ><i class="fa fa-home"></i></a> 
+    <a href="https://github.com/apolo-mejia" target="_blank"><i class="fab fa-github-alt"></i></a> 
+    <a href="mailto:mejia.m2m@gmail.com" target="_blank"><i class="fa fa-envelope"></i></a> 
+    <a href="http://central1.myddns.me/proyecto/" target="_blank"><i class="fa fa-globe"></i></a>
+    <a href="#" target="_blank"><i class="fa fa-headset"></i></a> 
+  </div>
+  </div>
+</body>
+</html>

@@ -1,121 +1,420 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
 {% block title %}Index{% endblock %}
 {% block head %}
   {{ super() }}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/machine.css')}} ">
 {% endblock %}
+  {% block styles %}
+  {{ super() }}
+#edit_mq{
+  float: left;
+  background-color: transparent;
+  padding: 3px 10px 3px 10px;
+  font: 14px Arial, sans-serif;
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-radius: 3px 3px 0 0;
+  margin: 0 3px 0 3px;
+  cursor: pointer;
+}
+#view_mq{
+  float: left;
+  background-color: {{ sel_hover_color }};
+  padding: 3px 10px 3px 10px;
+  font: 14px Arial, sans-serif;
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-radius: 3px 3px 0 0;
+  cursor: pointer;
+}
+#ec_mq{
+  float: left;
+  background-color: transparent;
+  padding: 3px 10px 3px 10px;
+  font: 14px Arial, sans-serif;
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-radius: 3px 3px 0 0;
+  cursor: pointer;
+}
+#edit_tab{
+  float: left;
+  width: 100%;
+  background-color: {{ sel_hover_color }};
+  display: none;
+}
+#view_tab{
+  float: left;
+  width: 100%;
+  background-color: {{ sel_hover_color }};
+}
+#ec_tab{
+  float: left;
+  width: 100%;
+  height: 200px;
+  background-color: {{ sel_hover_color }};
+  display:none;
+}
+#components_cont{
+  float: left;
+  width: 99.5%;
+  height: 300px;
+  min-height: 140px;
+  border: 1px solid blue;
+  border-radius: 4px;
+  min-width: 670px;
+  padding: 3px;
+}
+#mq_avatar{
+  float: left;
+  border: 1px solid {{ border_color }};
+  border-radius: 3px;
+  width: 66px;
+  height: 66px;
+  margin-right: 5px;
+}
+#avatares{
+  border-bottom: 1px solid {{ border_color }};
+  height: 68px;
+  width: 100%;
+}
+.parte{
+  float: left;
+  border: 1px solid {{ border_color }};
+  border-radius: 3px;
+  width: 66px;
+  height: 66px;
+  margin: 0 5px;
+}
+#indicadores{
+  float: left;
+  border-right: 1px solid {{ border_color }};
+  height: 230px;
+  width: 12%;
+}
+#tendencias{
+  float: left;
+  background-color: silver;
+  height: 230px;
+  width: 85%;
+}
+h4 {margin: 5px;}
+.td_head{
+  text-align: center;
+}
+{% endblock %}
 {% block content %}
-  <h2 style="width:100%; margin: 0 auto;">{{ machined['name']}}</h2>
-  <div id="components_cont">
-    {% for partd in partsd  %}
-       <a href="{{ url_for('part', id_p=partd['id'], rol=0) }}"
-        {% if partd['a_status'] == 1 %}    
-          style="background-color:#adebad;">
-        {% elif partd['a_status'] == 2 %}
-          style="background-color:#ffd1b3">
-        {% elif partd['a_status'] == 3 %}
-          style="background-color:#ff99bb">
-        {% elif partd['a_status'] == 4 %}
-          style="background-color:#d9d9d9">
-        {% else %}
-          >
-      {% endif %}
-      <img width="60px" height="60px" src="{{ url_for('static', filename='images/avatars/parts/local/')}}{{partd['avatar']}}">
-    </a>
-    {% endfor %}
-    <a href="#">
-      <img src="{{ url_for('static', filename='images/plus.png') }} " style="width:64px; height:64px; "alt="Ingresar un componente">
-    </a>
-  </div>
-
-  </div>
-  <div id="contend">
-    <div id="visual_des">
-      <a href="#">picture</a>
-      <a href="#">avatar</a>
+<h2 style="width:100%; margin: 0 auto;">{{ machined['name']}}</h2>
+<div id="components_cont">
+  <div id="avatares">
+    {% if machined['a_status'] == 1 %}
+    <div id="mq_avatar" style="background-color: #adebad">
+    {% elif machined['a_status'] == 2 %}
+    <div id="mq_avatar" style="background-color: #ffd1b3">
+    {% elif machined['a_status'] == 3 %}
+    <div id="mq_avatar" style="background-color: orange">
+    {% elif machined['a_status'] == 4 %}
+    <div id="mq_avatar" style="background-color: red">
+    {% else %}
+    <div id="mq_avatar" style="background-color: #e6e6e6">
+    {% endif %}
+    <img src="{{url_for('static', filename='data/machine_') }}{{ machined['id'] }}/avatars/{{ machined['avatarf'] }}"
+     width="60px" style="margin: 3px">
     </div>
-    <button class="accordion">Tareas Globales</button>
-      <div class="panel">
-        {% for taskd in tasksd %}
-          <div id="components_cont">
-            <a href='#'>
-              <img src="{{ url_for('static', filename='images/avatars/tasks/') }}{{taskd['avatar']}}" style="width:64px; heigth:64px;"> 
-            </a>
-            {{ taskd['name'] }} <br>
-          </div>
-        {% endfor %}
-      </div>
-    <button class="accordion">Datos de placa</button>
-      <div class="panel">
-        <div class="m_field">
-          <table>
-            <tr><td style="width:200px;">Potencia en kW: </td><td class="c_value">{{ machined['kw_nom'] }}</td><td><b>kilo Watts</b></td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-            <tr><td>Voltaje nominal: </td><td  class="c_value">{{ machined['v_nom'] }}</td><td><b>Volts</b></td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-            <tr><td>Corriente nominal: </td><td class="c_value">{{ machined['i_nom'] }}</td><td><b>Amperios</b></td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-            <tr><td>Número de fases: </td><td  class="c_value">{{ machined['n_phases'] }}</td><td><b>Fases</b></td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-            <tr><td>Frecuencia nominal: </td><td  class="c_value">{{ machined['f_nom'] }}</td><td><b>Hertz</b></td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-            <tr><td>Número de polos: </td><td class="c_value">{{ machined['n_poles'] }}</td><td><b>Polos</b></td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-            <tr><td>Clase IP: </td><td  class="c_value">{{ machined['ip_class'] }}</td><td><b> Clase IP</b></td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-            <tr><td>Clase/Tipo NEMA: </td><td class="c_value">{{ machined['nema_class'] }}</td><td><b> Clase NEMA</b></td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-            <tr><td>Carcasa / Housing: </td><td class="c_value">{{ machined['housing'] }}</td><td><b> Material</b></td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-          </table>
-        </div>
-      </div>
-    <button class="accordion">Datos de referencia</button>
-      <div class="panel">
-        <div class="m_field">
-          <table>
-            <tr><td style="width:200px;">Nombre: </td><td class="r_value">{{ machined['name'] }}</td>
-                 <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-            <tr><td>Marca: </td><td  class="r_value">{{ machined['brand'] }}</td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-            <tr><td>Modelo: </td><td  class="r_value">{{ machined['model'] }}</td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-            <tr><td>Serial: </td><td class="r_value">{{ machined['m_serial'] }}</td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-            <tr><td>Serial Interno/#Inventario: </td><td  class="r_value">{{ machined['i_serial'] }}</td>
-                <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-          </table>
-        </div>
-      </div>
-    <button class="accordion">Descripción / Journal</button>
-      <div class="panel">
-        <div class="m_field">
-          <table>
-            <tr><td style="width:200px;min-width:200px;">Descripción: </td><td class="d_value" style="width:82%;min-width:280px;">{{ machined['description'] }}</td>
-                 <td><i class="fas fa-pen-alt"></i></td><td><i class="fas fa-circle-question"></i></td></tr>
-          </table>
-          Journal
-          <div class="journal">
-            La últimos movimivientos de las cosas <br>
-            Primera linea<br>
-            Segunda linea<br>
-            Tercera linea<br>
-            Cuarta Linea<br>
-            Quita Linea<br>
-            Sexta Linea<br>
-            Séptima Linea<br>
-            Octava Linea<br>
-            Novena Linea<br>
-            Décima Linea<br>
-          </div>
-        </div>        
-          <div id="visual_des">
-            <a href="#">Ver todo</a>
-            <a href="#">+Ingresar evento</a> 
-          </div>
-      </div>   
+    {% for partd in partsd %}
+    {% if partd['a_status'] == 1 %}
+      <div class="parte" style="background-color: #adebad;"><a href="#">
+    {% elif partd['a_status'] == 2 %}
+      <div class="parte" style="background-color: #ffd1b3"><a href="#">
+    {% elif partd['a_status'] == 3 %}
+      <div class="parte" style="background-color: orange"><a href="#">
+    {% elif partd['a_status'] == 4 %}
+      <div class="parte" style="background-color: red;"><a href="#">
+    {% else %}
+      <div class="parte" style="background-color: #e6e6e6"><a href="#">
+    {% endif %}
+      <img src="{{ url_for('static', filename='data/machine_')}}{{ machined['id'] }}/avatars/{{partd['avatar']}}"
+      width="60px" height="60px" style="margin: 3px;">
+      </a>
+    </div>
+  {% endfor %}
   </div>
-
+  <div id="indicadores">
+  </div>
+  <div id="tendencias">
+  </div>
+</div>
+<div id="contend">
+<button class="accordion">Tareas Globales</button>
+  <div class="panel">
+    {% for taskd in tasksd %}
+      <div id="components_cont">
+        <a href='#'>
+          <img src="{{ url_for('static', filename='images/avatars/tasks/') }}{{taskd['avatar']}}" style="width:64px; height:64px;"> 
+        </a>
+        {{ taskd['name'] }} <br>
+      </div>
+    {% endfor %}
+  </div>
+<button class="accordion">Datos de la máquina</button>
+  <div class="panel">
+    <div style="float:left; width: 100%;">
+      <div id="view_mq">Revisar</div>
+      <div id="edit_mq">Editar</div>
+      <div id="ec_mq">Exportar / crear</div>
+    </div>
+    <div id="edit_tab">
+    <form method='POST' novalidate>
+    {{ mq_form.hidden_tag() }}
+    <table style="font: 11px Arial, sans-serif; width:100%;" >
+      <tr>
+        <td colspan="2" style="text-align: center;">Datos Referencia</td>
+        <td colspan="2" style="text-align: center; background-color: #ffd7b3;">Valores de Alimentación</td>
+        <td colspan="2" style="text-align: center;">Mecánicos / Otros</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>{{ mq_form.name.label }}</td>
+        <td>{{ mq_form.name(style= "font: 11px Arial, sans-serif; width:98px;", value = machined['name']) }} </td>
+        <td style="background-color: #ffd7b3">{{ mq_form.kw_nom.label }}</td>
+        <td style="background-color: #ffd7b3">{{ mq_form.kw_nom(style="font: 11px Arial, sans-serif;width: 98px;", value= machined['kw_nom']) }}</td>
+        <td>{{ mq_form.nema_class.label }}</td>
+        {% set f=mq_form.nema_class.process_data(machined['nema_class']) %}
+        <td>{{ mq_form.nema_class(style="font: 11px Arial, sans-serif; width: 98px;", dir="rtl") }}</td>
+        <td style="width:213px;">{{ mq_form.submit }}</td>
+      </tr>
+      <tr>
+        <td>{{ mq_form.id_process.label }}</td>
+        <td>{{ mq_form.id_process(style="font: 11px Arial, sans-serif; width:98px;") }}</td>
+        <td style="background-color: #ffd7b3">{{ mq_form.rpm_nom.label }}</td>
+        <td style="background-color: #ffd7b3">{{ mq_form.rpm_nom(style="font: 11px Arial; width:98px", value=machined['rpm_nom']) }}
+          {% for error in mq_form.rpm_nom.errors %}
+          <span style="color:red;"> {{ error }} </span> <br>
+          {% endfor %}
+        </td>
+        <td>{{ mq_form.ip_grade.label }}</td>
+        <td>{{ mq_form.ip_grade(size=11, value=machined['ip_grade'], style="font: 11px Arial, sans-serif; width: 98px;") }}</td>
+        <td rowspan="6" style="background-color: antiquewhite;">..</td>
+      </tr>
+      <tr>
+        <td>{{ mq_form.id_maintenance.label }}</td>
+        <td>{{ mq_form.id_maintenance(style="font: 11px Arial; width:98px") }}</td>
+        <td style="background-color: #ffd7b3">{{ mq_form.i_nom.label }}</td>
+        <td style="background-color: #ffd7b3;">{{ mq_form.i_nom(style="font: 11px Arial, sans-serif; width:98px", value=machined['i_nom']) }}</td>
+        <td>{{ mq_form.housing.label }}</td>
+        <td>{{ mq_form.housing(style="font: 11px Arial; width: 98px", value=machined['housing']) }}</td>   
+      </tr>
+      <tr>
+        <td>{{ mq_form.users.label }}</td>
+        <td>{{ mq_form.users(style="font: 11px Arial, sans-serif; width:106px;") }}</td>
+        <td style="background-color: #ffd7b3;">{{ mq_form.v_nom.label }}</td>
+        <td style="background-color: #ffd7b3;">{{ mq_form.v_nom(style="font: 11px Arial, sans-serif;width:98px", value=machined['v_nom']) }}</td>
+        <td>{{ mq_form.avatarf.label }}</td>
+        <td>{{ mq_form.avatarf(value=machined['avatarf'], style="display:none" )}}
+          <input type="text" disabled value="{{ machined['avatarf'] }}" style="font: 11px Arial, sans-serif;width:98px;">
+        </td>
+      </tr>
+      <tr>
+        <td>{{ mq_form.brand.label }}</td>
+        <td>{{ mq_form.brand(style="font: 11px Arial, sans-serif;width: 98px;", value = machined['brand'] ) }}</td>
+        <td style="background-color: #ffd7b3;">{{ mq_form.n_phases.label }}</td>
+          {% set f=mq_form.n_phases.process_data(machined['n_phases']) %}
+        <td style="background-color: #ffd7b3;"> 
+            {{ mq_form.n_phases(style="font: 11px Arial, sans-serif; width:98px;", dir="rtl") }}</td>
+        <td>{{ mq_form.picture.label}}</td>
+        <td>{{ mq_form.picture(value=machined['picture'], style="display:none" )}}
+          <input type="text" disabled value="{{ machined['picture'] }}" style="font: 11px Arial, sans-serif; width:98px;"></td>
+      </tr>
+      <tr>
+        <td>{{ mq_form.model.label }}</td>
+        <td>{{ mq_form.model(style="font: 11px Arial, sans-serif;width: 98px;", value = machined['model']) }}</td>
+        <td style="background-color: #ffd7b3;">{{ mq_form.n_poles.label }}</td>
+        {% set f=mq_form.n_poles.process_data(machined['n_poles']) %}
+        <td style="background-color: #ffd7b3;">{{ mq_form.n_poles(style="font: 11px Arial, sans-serif; width:98px;", dir="rtl") }}</td>
+        {% set f=mq_form.description.process_data(machined['description']) %}
+        <td colspan="2">{{ mq_form.description.label }}</td>
+      </tr>
+      <tr>
+        <td>{{ mq_form.m_serial.label }}</td>
+        <td>{{ mq_form.m_serial(style="font: 11px Arial, sans-serif;width: 98px;", value = machined['m_serial']) }}</td>
+        <td style="background-color: #ffd7b3;">{{ mq_form.f_nom.label }}</td>
+        {% set f=mq_form.f_nom.process_data(machined['f_nom']) %}
+        <td style="background-color: #ffd7b3;">{{ mq_form.f_nom(style="font: 11px Arial, sans-serif; width:98px;", dir="rtl") }}</td>
+        <td colspan="2" rowspan="3" >
+          {{ mq_form.description(style="font:11px Arial, sans-serif; width:218px; height:50px; resize:none;")}}
+        </td>
+        {% set f=mq_form.journal.process_data(machined['journal']) %}
+      </tr>
+      <tr>
+        <td>{{ mq_form.i_serial.label }}</td>
+        <td>{{ mq_form.i_serial(style="font: 11px Arial, sans-serif;width: 98px;", value = machined['i_serial']) }}</td>
+        <td style="background-color: #ffd7b3;"></td>
+        <td style="background-color: #ffd7b3;"></td>
+        <td>{{ mq_form.journal(style="display:none;")}}</td>
+        <td></td>
+      </tr>
+      </table>
+      </form>
+      </div>
+      <div id="view_tab">
+      <table style="font: 11px Arial, sans-serif; width:100%;" >
+        <tr>
+          <td colspan="2" style="text-align: center;">Datos Referencia</td>
+          <td colspan="2" style="text-align: center; background-color: #ffd7b3;">Valores de Alimentación</td>
+          <td colspan="2" style="text-align: center;">Mecánicos / Otros</td>
+          <td></td>
+        </tr>  
+        <tr>
+          <td>{{ mq_form.name.label }}</td>
+          <td><input type="text" style="font: 11px Arial, sans-serif; width: 98px;" value="{{ machined['name'] }}" disabled></td>
+          <td style="background-color: #ffd7b3">{{ mq_form.kw_nom.label }}</td>
+          <td style="background-color: #ffd7b3">
+            <input type="number" value="{{ machined['kw_nom']}}" style="font: 11px Arial, sans-serif;width: 98px;" disabled>
+          </td>
+          <td>{{ mq_form.nema_class.label }}</td>
+          <td>
+            <input type="text" style="font: 11px Arial, sans-serif; width:98px;" dir="rtl"  
+            value="{{ machined['nema_class'] }}" disabled>
+          </td>
+          <td style="width:213px;"></td>
+        </tr>
+        <tr>
+          <td>{{ mq_form.id_process.label }}</td>
+          <td><input type="text" style="font: 11px Arial, sans-serif; width:90px;" disabled></td>
+          <td style="background-color: #ffd7b3">{{ mq_form.rpm_nom.label }}</td>
+          <td style="background-color: #ffd7b3"><input type="number" style="font: 11px Arial;width: 98px" value="{{ machined['rpm_nom'] }}" disabled></td>
+          <td>{{ mq_form.ip_grade.label }}</td>
+          <td>
+            <input type="text" size="11" value="{{ machined['ip_grade'] }}" disabled style="font: 11px Arial;width: 98px;">
+          </td>
+          <td rowspan="6" style="background-color: antiquewhite;">..</td>
+        </tr>
+        <tr>
+          <td>{{ mq_form.id_maintenance.label }}</td>
+          <td><input type="text" style="font: 11px Arial, sans-serif;width: 90px;" disabled></td>
+          <td style="background-color: #ffd7b3">{{ mq_form.i_nom.label }}</td>
+          <td style="background-color: #ffd7b3;">
+            <input type="number" style="font: 11px Arial; width: 98px" value="{{ machined['i_nom'] }}" disabled>
+          </td>
+          <td>{{ mq_form.housing.label }}</td>
+          <td><input type="text" style="font: 11px Arial; width: 98px" disabled value="{{ machined['housing'] }}"></td>
+        </tr>
+        <tr>
+          <td>{{ mq_form.users.label }}</td>
+          <td><input type="text" style="font: 11px Arial, sans-serif; width: 98px" value="Administradores" disabled></td>
+          <td style="background-color: #ffd7b3;">{{ mq_form.v_nom.label }}</td>
+          <td style="background-color: #ffd7b3;">
+            <input type="number" style="font: 11px Arial, sans-serif; width: 98px",
+             value="{{ machined['v_nom'] }}", disabled>
+          </td>
+          <td>{{ mq_form.avatarf.label }}</td>
+          <td>{{ mq_form.avatarf(value=machined['avatarf'], style="display:none" )}}
+            <input type="text" disabled value="{{ machined['avatarf'] }}" style="font: 11px Arial, sans-serif;width: 98px;">
+          </td>
+        </tr>
+        <tr>
+          <td>{{ mq_form.brand.label }}</td>
+          <td><input type="text" style="font: 11px Arial, sans-serif;width: 98px;" value="{{ machined['brand'] }}" disabled></td>
+          <td style="background-color: #ffd7b3;">{{ mq_form.n_phases.label }}</td>
+          <td style="background-color: #ffd7b3;">
+            <input type="text" style="font: 11px Arial, sans-serif; width: 98px;" dir="rtl" 
+              value="{{ machined['n_phases'] }}" disabled>
+          </td>
+          <td>{{ mq_form.picture.label}}</td>
+          <td>
+            <input type="text" disabled value="{{ machined['picture'] }}" style="font: 11px Arial, sans-serif;width: 98px;"></td>
+        </tr>
+        <tr>
+          <td>{{ mq_form.model.label }}</td>
+          <td><input type="text" style="font: 11px Arial, sans-serif;width: 98px;" value="{{ machined['model'] }}" disabled></td>
+          <td style="background-color: #ffd7b3;">{{ mq_form.n_poles.label }}</td>
+          <td style="background-color: #ffd7b3;">
+            <input type="text" style="font:11px Arial, sans-serif; width:98px;" dir="rtl"
+            value = "{{ machined['n_poles'] }}" disabled>
+          </td>
+          <td colspan="2">{{ mq_form.description.label }}</td>
+        </tr>
+        <tr>
+          <td>{{ mq_form.m_serial.label }}</td>
+          <td>
+            <input type="text" style="font: 11px Arial, sans-serif;width: 98px;" value="{{ machined['m_serial'] }}" disabled>
+          </td>
+          <td style="background-color: #ffd7b3;">{{ mq_form.f_nom.label }}</td>
+          <td style="background-color: #ffd7b3;">
+            <input type="text" style="font:11px Arial, sans-serif; width:98px;" dir="rtl" value="{{ machined['f_nom'] }}" disabled>
+            </td>
+          <td colspan="2" rowspan="3" >
+            <textarea style="font:11px Arial, sans-serif; width:218px; height:50px; resize:none;" disabled>
+{{ machined['description'] }}
+            </textarea>
+          </td>
+          </tr>
+          <tr>
+            <td>{{ mq_form.i_serial.label }}</td>
+            <td><input type="text" style="font: 11px Arial, sans-serif;width: 98px;" value="{{ machined['i_serial'] }}" disabled></td>
+            <td style="background-color: #ffd7b3;"></td>
+            <td style="background-color: #ffd7b3;"></td>
+            <td></td>
+          </tr>
+          </table>
+        </div>
+        <div id="ec_tab">
+          la de esxporter borrar
+        </div>
+      </div>
+<button class="accordion">Descripción / Journal</button>
+  <div class="panel" style="font: 11px Arial, sans-serif">
+    
+      <table style="border: 1px solid black;">
+        <tr>
+          <td class="td_head" style="width:59%; min-width:200px;">Descripción: </td>
+          <td class="td_head" style="width:20%; min-width:200px;">AVATAR</td>
+          <td class="td_head" style="width:20%; min-width:200px;">FOTO</td>
+        </tr>
+        <tr>
+          <td>
+          <textarea style="width:98%; height:120px; font: 10px Courier-New, Monospace; resize:none;" readonly>
+{{ machined['description'] }}
+          </textarea>
+          </td>
+          <td style="border: 1px solid {{ border_color }};">
+            <img src="{{url_for('static', filename='data/machine_')}}{{machined['id']}}/avatars/{{machined['avatarf']}}"
+            style="display: block; margin: auto auto; width: 120px; height: 120px;">
+          </td>
+          <td style="border: 1px solid {{ border_color }};">
+            <img src="{{url_for('static', filename='data/machine_')}}{{machined['id']}}/pictures/{{machined['picture']}}" 
+            style="display: block; margin: auto auto; width: 120px; height: 120px;">
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td>
+            <form method="POST"  enctype="multipart/form-data" >
+              {{ pic_form.hidden_tag() }}
+              {# pic_form.documento.label #}
+              {{ pic_form.documento(style="font: 9px Arial, sans-serif;")}}
+              {{ pic_form.submitdoc(style="font: 9px Arial, sans-serif;") }}
+            </form>
+          </td>
+        </tr>
+      </table>
+            
+    <h4>Journal</h4>
+    <textarea style="width:100%; height:140px; font: 10px Courier-New, Monospace; resize:none;" wrap="soft" readonly>
+{% for line in j_lines %}{{ line[:-2] }} &#13;{% endfor%}
+    </textarea>
+    <h4>Ingresar  un mensaje en el Journal</h4>
+    <form method="POST" novalidate>
+      {{ j_form.hidden_tag() }}
+      {{ j_form.pack( style="width: 100%; height:33px; resize:none;")}}
+      {{ j_form.submitpk() }}
+    </form>      
+    </div>   
+</div>
 <script>
 var acc = document.getElementsByClassName("accordion");
 var i;
@@ -131,6 +430,60 @@ for (i = 0; i < acc.length; i++) {
     }
   });
 }
-</script>
 
+view_mq.addEventListener("mouseover", function(){
+  this.style.backgroundColor = "{{ sel_hover_color }}";
+});
+view_mq.addEventListener("mouseout", function() {
+  if (view_tab.style.display === "block") {
+    this.style.backgroundColor = "{{ sel_hover_color }}"; 
+  } else {
+    this.style.backgroundColor = "transparent";  
+  }
+});
+view_mq.addEventListener("click", function() {
+  view_tab.style.display = "block";
+  edit_tab.style.display = "none";
+  ec_tab.style.display = "none";
+  edit_mq.style.backgroundColor = "transparent";
+  ec_mq.style.backgroundColor = "transparent"
+  this.style.backgroundColor = "{{sel_hover_color }}";
+});
+
+edit_mq.addEventListener("mouseover", function(){
+  this.style.backgroundColor = "{{ sel_hover_color}}";
+});
+edit_mq.addEventListener("mouseout", function() {
+  if (edit_tab.style.display === "block") {
+    this.style.backgroundColor = "{{ sel_hover_color }}"; 
+  } else {
+    this.style.backgroundColor = "transparent";  
+  }
+});
+edit_mq.addEventListener("click", function() {
+  view_tab.style.display = "none";
+  edit_tab.style.display = "block";
+  ec_tab.style.display = "none";
+  view_mq.style.backgroundColor = "transparent";
+  ec_mq.style.backgroundColor = "transparent";
+  this.style.backgroundColor = "{{sel_hover_color }}";
+});
+
+ec_mq.addEventListener("mouseover", function(){
+  if (ec_tab.style.display === "block") {
+    this.style.backgroundColor = "{{ sel_hover_color }}"; 
+  } else {
+    this.style.backgroundColor = "transparent";  
+  }
+});
+
+ec_mq.addEventListener("click", function() {
+  view_tab.style.display = "none";
+  edit_tab.style.display = "none";
+  ec_tab.style.display = "block";
+  edit_mq.style.backgroundColor = "transparent";
+  view_mq.style.backgroundColor = "transparent"
+  this.style.backgroundColor = "{{sel_hover_color }}";
+});
+</script>
 {% endblock %}
